@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug (ST-Link)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "stlink",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug/Dash.elf",
+      "device": "STM32H743XX",
+      "interface": "swd",
+      "runToEntryPoint": "main",
+      "gdbPath": "arm-none-eabi-gdb",
+      "preLaunchTask": "CMake: Build"
+    }
+  ]
+}

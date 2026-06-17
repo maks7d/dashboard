@@ -49,32 +49,8 @@
   * @{
   */
 
-#include "stm32h743xx.h"
+#include "stm32h7xx.h"
 #include <math.h>
-
-#ifndef READ_REG
-#define READ_REG(REG)         ((REG))
-#endif
-
-#ifndef WRITE_REG
-#define WRITE_REG(REG, VAL)   ((REG) = (VAL))
-#endif
-
-#ifndef READ_BIT
-#define READ_BIT(REG, BIT)    ((REG) & (BIT))
-#endif
-
-#ifndef SET_BIT
-#define SET_BIT(REG, BIT)     ((REG) |= (BIT))
-#endif
-
-#ifndef CLEAR_BIT
-#define CLEAR_BIT(REG, BIT)   ((REG) &= ~(BIT))
-#endif
-
-#ifndef MODIFY_REG
-#define MODIFY_REG(REG, CLEARMASK, SETMASK)  WRITE_REG((REG), (((READ_REG(REG)) & (~(CLEARMASK))) | (SETMASK)))
-#endif
 
 #if !defined  (HSE_VALUE)
 #define HSE_VALUE    ((uint32_t)25000000) /*!< Value of the External oscillator in Hz */
