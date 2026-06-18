@@ -110,6 +110,7 @@ int main(void)
   MX_ADC2_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
+  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_SET);
   MX_GPIO_EXTI_Init();

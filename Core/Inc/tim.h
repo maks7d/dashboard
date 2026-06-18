@@ -41,7 +41,9 @@ extern TIM_HandleTypeDef htim2;
 void MX_TIM2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+extern TIM_HandleTypeDef htim16;
+extern DMA_HandleTypeDef hdma_tim16_ch1;
+void MX_TIM16_Init(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

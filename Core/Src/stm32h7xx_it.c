@@ -57,7 +57,7 @@
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
-
+extern DMA_HandleTypeDef hdma_tim16_ch1;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -216,5 +216,10 @@ void TIM2_IRQHandler(void)
 void EXTI9_5_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(POWER_BTN_PIN);
+}
+
+void DMA1_Stream0_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(&hdma_tim16_ch1);
 }
 /* USER CODE END 1 */
