@@ -21,7 +21,7 @@
 #include "spi.h"
 
 /* USER CODE BEGIN 0 */
-
+DMA_HandleTypeDef hdma_spi1_rx;
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi1;
@@ -40,11 +40,11 @@ void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -92,22 +92,45 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     /* SPI1 clock enable */
     __HAL_RCC_SPI1_CLK_ENABLE();
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOG_CLK_ENABLE();
     /**SPI1 GPIO Configuration
     PA4     ------> SPI1_NSS
-    PA5     ------> SPI1_SCK
-    PA6     ------> SPI1_MISO
+    PG11    ------> SPI1_SCK
+    PG9     ------> SPI1_MISO
     PA7     ------> SPI1_MOSI
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Mode  = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull  = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+
+    //NSS + MOSI sur GPIOA
+    GPIO_InitStruct.Pin       = GPIO_PIN_4|GPIO_PIN_7;
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN SPI1_MspInit 1 */
+    //SCK + MISO sur GPIOG
+    GPIO_InitStruct.Pin       = GPIO_PIN_11|GPIO_PIN_9;
+    GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
+  /* USER CODE BEGIN SPI1_MspInit 1 */
+    /* SPI1 RX DMA — DMA2_Stream0 (DMA1_Stream0 réservé à TIM16/WS2812) */
+    __HAL_RCC_DMA2_CLK_ENABLE();
+    hdma_spi1_rx.Instance                 = DMA2_Stream0;
+    hdma_spi1_rx.Init.Request             = DMA_REQUEST_SPI1_RX;
+    hdma_spi1_rx.Init.Direction           = DMA_PERIPH_TO_MEMORY;
+    hdma_spi1_rx.Init.PeriphInc           = DMA_PINC_DISABLE;
+    hdma_spi1_rx.Init.MemInc              = DMA_MINC_ENABLE;
+    hdma_spi1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_spi1_rx.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
+    hdma_spi1_rx.Init.Mode                = DMA_NORMAL;
+    hdma_spi1_rx.Init.Priority            = DMA_PRIORITY_HIGH;
+    hdma_spi1_rx.Init.FIFOMode            = DMA_FIFOMODE_DISABLE;
+    if (HAL_DMA_Init(&hdma_spi1_rx) != HAL_OK)
+      Error_Handler();
+    __HAL_LINKDMA(spiHandle, hdmarx, hdma_spi1_rx);
+    HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
   /* USER CODE END SPI1_MspInit 1 */
   }
 }
@@ -125,11 +148,12 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
 
     /**SPI1 GPIO Configuration
     PA4     ------> SPI1_NSS
-    PA5     ------> SPI1_SCK
-    PA6     ------> SPI1_MISO
+    PG11    ------> SPI1_SCK
+    PG9     ------> SPI1_MISO
     PA7     ------> SPI1_MOSI
     */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4|GPIO_PIN_7);
+    HAL_GPIO_DeInit(GPIOG, GPIO_PIN_11|GPIO_PIN_9);
 
   /* USER CODE BEGIN SPI1_MspDeInit 1 */
 
