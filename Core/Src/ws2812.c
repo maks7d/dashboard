@@ -1,4 +1,4 @@
-#include "ws2812b.h"
+#include "ws2812.h"
 #include "tim.h"   // htim16 généré par CubeMX
 #include <string.h>
 
