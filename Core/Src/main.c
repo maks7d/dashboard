@@ -30,7 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "display.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -114,6 +114,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_SET);
   MX_GPIO_EXTI_Init();
+
+  /* Display power-on sequence: DISP high after 10ms, backlight on after 250ms */
+  Display_Init();
+
+  /* Start lap timer (TIM2 CH1 input capture on PA0) */
+  HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */

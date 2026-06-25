@@ -1,6 +1,6 @@
 Pinlist
 
-Exported from Carte-mere-dashboard v43.sch at 24/06/2026 21:56
+Exported from Carte-mere-dashboard v45.sch at 25/06/2026 20:22
 
 EAGLE Version 9.7.0 Copyright (c) 1988-2026 Autodesk, Inc.
 
@@ -416,13 +416,13 @@ IC3      1        PE2        io       !PG
          88       PE14       io                *** unconnected ***
          89       PE15       io                *** unconnected ***
          90       PB10       io       LTDC_G4
-         91       PB11       io                *** unconnected ***
+         91       PB11       io       BL_PWM
          92       VCAP1      pwr      VCAP
          93       VSS_7      pwr      GND
          94       VDD_8      pwr      +3.3V
          95       PJ5        io                *** unconnected ***
          96       PH6        io                *** unconnected ***
-         97       PH7        io                *** unconnected ***
+         97       PH7        io       DISP
          98       PH8        io                *** unconnected ***
          99       PH9        io                *** unconnected ***
          100      PH10       io                *** unconnected ***

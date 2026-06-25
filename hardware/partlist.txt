@@ -1,6 +1,6 @@
 Partlist
 
-Exported from Carte-mere-dashboard v43.sch at 24/06/2026 21:56
+Exported from Carte-mere-dashboard v45.sch at 25/06/2026 20:22
 
 EAGLE Version 9.7.0 Copyright (c) 1988-2026 Autodesk, Inc.
 

@@ -63,6 +63,11 @@ void Error_Handler(void);
 #define POWER_HOLD_PORT  GPIOE
 #define POWER_BTN_PIN    GPIO_PIN_7
 #define POWER_BTN_PORT   GPIOG
+
+#define DISP_PIN         GPIO_PIN_7   /* PH7 — display standby (active high) */
+#define DISP_PORT        GPIOH
+#define BL_PWM_PIN       GPIO_PIN_11  /* PB11 — DIO5661 EN (active high)     */
+#define BL_PWM_PORT      GPIOB
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

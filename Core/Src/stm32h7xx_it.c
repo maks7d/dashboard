@@ -216,6 +216,9 @@ void TIM2_IRQHandler(void)
 void EXTI9_5_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(POWER_BTN_PIN);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_6);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
 }
 
 void DMA1_Stream0_IRQHandler(void)

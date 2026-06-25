@@ -187,7 +187,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
 
     __HAL_LINKDMA(htim, hdma[TIM_DMA_ID_CC1], hdma_tim16_ch1);
 
-    HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
   }
 }

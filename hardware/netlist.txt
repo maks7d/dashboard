@@ -1,6 +1,6 @@
 Netlist
 
-Exported from Carte-mere-dashboard v43.sch at 24/06/2026 21:55
+Exported from Carte-mere-dashboard v45.sch at 25/06/2026 20:22
 
 EAGLE Version 9.7.0 Copyright (c) 1988-2026 Autodesk, Inc.
 
@@ -163,6 +163,7 @@ Net              Part      Pad      Pin        Sheet
                  U6        3        VIN        1
 
 BL_PWM           IC2       4        EN         1
+                 IC3       91       PB11       1
 
 BOOT             R36       1        1          1
                  S6        1        1          1
@@ -225,6 +226,8 @@ DAT3             IC3       162      PC11       1
 
 DIN              D1        4        DIN        1
                  R1        1        1          1
+
+DISP             IC3       97       PH7        1
 
 DI_IO0           IC1       5        DI_(IO0_)  1
 
