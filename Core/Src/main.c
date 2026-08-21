@@ -31,6 +31,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "display.h"
+#include "veml6030.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,17 +54,72 @@
 /* USER CODE BEGIN PV */
 static volatile uint32_t power_btn_press_tick = 0;
 static volatile uint8_t  power_btn_held = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+int32_t VEML6030_I2C_Init(void);
+int32_t VEML6030_I2C_DeInit(void);
+int32_t VEML6030_I2C_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pData, uint16_t Length);
+int32_t VEML6030_I2C_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pData, uint16_t Length);
+int32_t VEML6030_I2C_IsReady(uint16_t Addr, uint32_t Trials);
+int32_t VEML6030_GetTick(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// fonctions de bus i2c pour le VEML6030
+extern I2C_HandleTypeDef hi2c1;
+int32_t VEML6030_I2C_Init(void){
+  if (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) {
+    MX_I2C1_Init(); // réinitialiser le bus I2C si nécessaire
+  }
+  return VEML6030_OK;
+}
+
+int32_t VEML6030_I2C_DeInit(void){
+  HAL_I2C_DeInit(&hi2c1);
+  return VEML6030_OK;
+}
+int32_t VEML6030_I2C_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pData, uint16_t Length){
+  //Addr est l'adresse I2C du périphérique, Reg est le registre à écrire, pData est le pointeur vers les données à écrire, Length est la longueur des données
+  if (HAL_I2C_Mem_Write(&hi2c1, Addr, Reg, I2C_MEMADD_SIZE_8BIT, pData, Length, 100) != HAL_OK) {
+    return VEML6030_ERROR;
+  }
+  return VEML6030_OK;
+}
+int32_t VEML6030_I2C_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pData, uint16_t Length){
+  if (HAL_I2C_Mem_Read(&hi2c1, Addr, Reg, I2C_MEMADD_SIZE_8BIT, pData, Length, 100) != HAL_OK) {
+    return VEML6030_ERROR;
+  }
+  return VEML6030_OK;
+}
+
+int32_t VEML6030_I2C_IsReady(uint16_t Addr, uint32_t Trials){
+  if (HAL_I2C_IsDeviceReady(&hi2c1, Addr, Trials, 100) != HAL_OK) {
+    return VEML6030_ERROR;
+  }
+  return VEML6030_OK;
+}
+
+int32_t VEML6030_GetTick(void){
+  return HAL_GetTick();
+}
+
+VEML6030_Object_t veml6030;
+VEML6030_IO_t veml6030_io = {
+  .Init = VEML6030_I2C_Init,
+  .DeInit = VEML6030_I2C_DeInit,
+  .ReadAddress = VEML6030_I2C_READ_ADD, // 0x21
+  .WriteAddress = VEML6030_I2C_WRITE_ADD, // 0x20
+  .IsReady = VEML6030_I2C_IsReady,
+  .WriteReg = VEML6030_I2C_WriteReg,
+  .ReadReg = VEML6030_I2C_ReadReg,
+  .GetTick = VEML6030_GetTick
+};
 
 /* USER CODE END 0 */
 
@@ -114,6 +170,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_SET);
   MX_GPIO_EXTI_Init();
+
+  /* Initialize the VEML6030 light sensor */
+  VEML6030_RegisterBusIO(&veml6030, &veml6030_io);
+
+  if (VEML6030_Init(&veml6030) != VEML6030_OK) {
+    Error_Handler();
+  }
+
+  VEML6030_SetExposureTime(&veml6030, VEML6030_CONF_IT100); // Set exposure time to 100ms
+  VEML6030_SetGain(&veml6030, VEML6030_ALS_CHANNEL, VEML6030_CONF_GAIN_1); // Set gain for channel 1 to 1x
+  VEML6030_Start(&veml6030, VEML6030_MODE_CONTINUOUS); // Start continuous measurement
 
   /* Display power-on sequence: DISP high after 10ms, backlight on after 250ms */
   Display_Init();
