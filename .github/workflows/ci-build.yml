@@ -39,8 +39,8 @@ jobs:
       - name: Generate binary files
         working-directory: build
         run: |
-          arm-none-eabi-objcopy -O binary Dash Dash.bin
-          arm-none-eabi-objcopy -O ihex Dash Dash.hex
+          arm-none-eabi-objcopy -O binary Dash.elf Dash.bin
+          arm-none-eabi-objcopy -O ihex Dash.elf Dash.hex
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
