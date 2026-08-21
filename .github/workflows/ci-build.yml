@@ -30,7 +30,7 @@ jobs:
 
       - name: Configure CMake
         working-directory: build
-        run: cmake .. -DCMAKE_BUILD_TYPE=Release
+        run: cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake/gcc-arm-none-eabi.cmake -DCMAKE_BUILD_TYPE=Release
 
       - name: Build project
         working-directory: build
