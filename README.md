@@ -1,21 +1,6 @@
-# Dashboard Karting — STM32H743
+# Dashboard Motorsport — STM32H743
 
-Firmware embarqué pour un dashboard de karting sur mesure. Affichage des temps au tour, données IMU, GPS, gestion batterie et retour visuel via LEDs adressables.
-
----
-
-## Matériel
-
-| Composant | Rôle | Interface |
-|---|---|---|
-| STM32H743 | MCU principal @ 400 MHz | — |
-| BMI270 | IMU (accéléromètre + gyroscope) | SPI |
-| NEO-M9N | GPS | UART |
-| WS2812B × 10 | LEDs adressables RGB | SPI + DMA |
-| BQ25887 | Chargeur batterie Li-Ion 2S | I2C |
-| Buzzer | Alertes sonores | TIM PWM |
-| Boutons | Navigation interface | GPIO EXTI |
-| P-MOSFET | Circuit d'allumage/extinction | GPIO |
+Firmware embarqué pour un dashboard de sport auto/moto/karting. Affichage des temps au tour, données IMU, GPS, gestion batterie et retour visuel via LEDs adressables.
 
 ---
 
@@ -23,7 +8,7 @@ Firmware embarqué pour un dashboard de karting sur mesure. Affichage des temps 
 
 ### Prérequis logiciels
 
-#### 1. VS Code
+#### 1. VS Code 
 Télécharger sur [code.visualstudio.com](https://code.visualstudio.com).
 
 Extensions obligatoires (installer via `Ctrl+Shift+X`) :
@@ -58,17 +43,6 @@ Vérifier après redémarrage du terminal :
 ```bash
 ninja --version
 ```
-
-#### 5. STM32CubeIDE (pour le debug uniquement)
-Télécharger depuis [st.com](https://www.st.com/en/development-tools/stm32cubeide.html).
-
-Requis uniquement pour fournir `ST-LINK_gdbserver.exe` utilisé par Cortex-Debug lors du flash/debug via `F5`. Pas besoin de l'ouvrir pour coder.
-
-#### 6. STM32CubeMX (optionnel, pour modifier la config MCU)
-Télécharger depuis [st.com](https://www.st.com/en/development-tools/stm32cubemx.html).
-
-Ouvrir `Dash.ioc` pour modifier les pins, horloges ou périphériques, puis régénérer le code. Le code applicatif dans les zones `USER CODE` est préservé à la régénération.
-
 ---
 
 ### Cloner et compiler
@@ -77,18 +51,17 @@ Ouvrir `Dash.ioc` pour modifier les pins, horloges ou périphériques, puis rég
 git clone <url-du-repo>
 cd dashbaord
 
-# Configurer le projet (première fois uniquement)
-cmake --preset Debug
-
-# Compiler
-cmake --build --preset Debug
+# sur Linux/MacOS
+chmod +x ./build.sh
+./build.sh
 ```
 
-Le fichier compilé est généré dans `build/Debug/Dash.elf`.
-
-Dans VS Code, utiliser directement :
-- `Ctrl+Shift+B` — compiler
-- `F5` — compiler, flasher et démarrer le debug (ST-Link requis)
+Le fichier compilé est généré dans `build/Debug` sous différents formats :
+```
+build/Debug/dashboard.elf
+build/Debug/dashboard.hex
+build/Debug/dashboard.bin
+```
 
 ---
 
@@ -261,14 +234,5 @@ Définis dans `Core/Inc/main.h` :
 Les autres assignations de pins (SPI, UART, TIM, I2C) sont visibles dans `Dash.ioc` (ouvrir avec STM32CubeMX) et dans les fichiers d'init correspondants (`spi.c`, `usart.c`, etc.).
 
 ---
-
-### Mémoire disponible (build Debug actuel)
-
-| Région | Utilisé | Disponible | Usage recommandé |
-|---|---|---|---|
-| FLASH | ~46 KB / 2 MB | ~1954 KB | Code et constantes |
-| DTCM RAM | ~4 KB / 128 KB | ~124 KB | Stack, variables critiques |
-| AXI SRAM | 0 / 512 KB | 512 KB | Buffers DMA (WS2812B, GPS, SPI) |
-| AHB SRAM D2 | 0 / 288 KB | 288 KB | Buffers périphériques D2 |
 
 > **Important** : les buffers utilisés avec le DMA doivent être placés en AXI SRAM (`0x24000000`), pas en DTCM. Le DTCM n'est pas accessible par le DMA sur H743.
