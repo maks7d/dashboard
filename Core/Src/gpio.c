@@ -125,6 +125,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF1_TIM16;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 2 */
@@ -135,9 +141,6 @@ void MX_GPIO_EXTI_Init(void)
 
   HAL_NVIC_SetPriority(EXTI0_IRQn, 6,0); // PE0 IMU interrupt
   HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 7,0); // PG1 BQ interrupt
-  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 
   HAL_NVIC_SetPriority(EXTI4_IRQn, 7,0); // PI4 light sensor interrupt
   HAL_NVIC_EnableIRQ(EXTI4_IRQn);

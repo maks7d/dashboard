@@ -1,6 +1,13 @@
 set(CMAKE_SYSTEM_NAME               Generic)
 set(CMAKE_SYSTEM_PROCESSOR          arm)
 
+find_program(ARM_GCC arm-none-eabi-gcc)
+if(NOT ARM_GCC)
+    message(FATAL_ERROR "arm-none-eabi-gcc not found in PATH")
+endif()
+
+
+
 set(CMAKE_C_COMPILER_ID GNU)
 set(CMAKE_CXX_COMPILER_ID GNU)
 
