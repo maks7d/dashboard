@@ -8,7 +8,7 @@ Firmware embarqué pour un dashboard de sport auto/moto/karting. Affichage des t
 
 ### Prérequis logiciels
 
-#### 1. VS Code 
+#### 1. VS Code (Optionnel)
 Télécharger sur [code.visualstudio.com](https://code.visualstudio.com).
 
 Extensions obligatoires (installer via `Ctrl+Shift+X`) :
@@ -20,7 +20,7 @@ Extensions obligatoires (installer via `Ctrl+Shift+X`) :
 | Cortex-Debug | `marus25.cortex-debug` | Flash et debug ST-Link |
 
 #### 2. ARM GNU Toolchain
-Télécharger la version **arm-none-eabi** depuis [developer.arm.com](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads).
+Télécharger la dernière version pour votre OS (Windows, Linux, macOS) de **arm-none-eabi** depuis [developer.arm.com](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads).
 
 Installer et vérifier :
 ```bash
@@ -28,13 +28,13 @@ arm-none-eabi-gcc --version
 ```
 
 #### 3. CMake
-Télécharger depuis [cmake.org](https://cmake.org/download/) (version 3.22 minimum).
+Télécharger depuis [cmake.org](https://cmake.org/download/) (version 3.22 minimum) ou avec apt(linux) ou brew(macOS).
 
 ```bash
 cmake --version
 ```
 
-#### 4. Ninja
+#### 4. Ninja pour compiler plus rapidement (Optionnel)
 ```bash
 winget install Ninja-build.Ninja
 ```
@@ -211,28 +211,3 @@ Bouton relâché avant 5s
 ```
 
 ---
-
-### Interruptions configurées
-
-| Handler | Fichier | Déclencheur |
-|---|---|---|
-| `TIM2_IRQHandler` | `stm32h7xx_it.c` | TIM2 — détection tour sur PA0 |
-| `EXTI9_5_IRQHandler` | `stm32h7xx_it.c` | PG7 — bouton power |
-| `SysTick_Handler` | `stm32h7xx_it.c` | 1 kHz — HAL tick + vérif. appui long |
-
----
-
-### Pins notables
-
-Définis dans `Core/Inc/main.h` :
-
-| Define | Pin | Rôle |
-|---|---|---|
-| `POWER_HOLD_PIN` | PE3 | Maintien alimentation PMOS |
-| `POWER_BTN_PIN` | PG7 | Bouton extinction (appui > 5s) |
-
-Les autres assignations de pins (SPI, UART, TIM, I2C) sont visibles dans `Dash.ioc` (ouvrir avec STM32CubeMX) et dans les fichiers d'init correspondants (`spi.c`, `usart.c`, etc.).
-
----
-
-> **Important** : les buffers utilisés avec le DMA doivent être placés en AXI SRAM (`0x24000000`), pas en DTCM. Le DTCM n'est pas accessible par le DMA sur H743.
