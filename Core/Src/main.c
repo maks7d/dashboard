@@ -114,7 +114,7 @@ int32_t VEML6030_I2C_IsReady(uint16_t Addr, uint32_t Trials){
 }
 
 int32_t VEML6030_GetTick(void){
-  return HAL_GetTick();
+  return xTaskGetTickCount();
 }
 
 VEML6030_Object_t veml6030;
@@ -310,7 +310,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if (GPIO_Pin == POWER_BTN_PIN) {
     if (HAL_GPIO_ReadPin(POWER_BTN_PORT, POWER_BTN_PIN) == GPIO_PIN_RESET) {
-      power_btn_press_tick = HAL_GetTick();
+      power_btn_press_tick = xTaskGetTickCount();
       power_btn_held = 1;
     } else {
       power_btn_held = 0;
@@ -320,7 +320,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void HAL_SYSTICK_Callback(void)
 {
-  if (power_btn_held && (HAL_GetTick() - power_btn_press_tick >= 5000)) {
+  if (power_btn_held && (xTaskGetTickCount() - power_btn_press_tick >= 5000)) {
     power_btn_held = 0;
     HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_RESET);
   }
