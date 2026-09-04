@@ -27,11 +27,15 @@
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "ws2812.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "display.h"
 #include "veml6030.h"
+#include "ws2812.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,12 +71,16 @@ int32_t VEML6030_I2C_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pData, uint1
 int32_t VEML6030_I2C_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pData, uint16_t Length);
 int32_t VEML6030_I2C_IsReady(uint16_t Addr, uint32_t Trials);
 int32_t VEML6030_GetTick(void);
+
+//FreeRTOS 
+void vTaskLED(void *pvParameters);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 // fonctions de bus i2c pour le VEML6030
 extern I2C_HandleTypeDef hi2c1;
+extern TIM_HandleTypeDef htim16;
 int32_t VEML6030_I2C_Init(void){
   if (HAL_I2C_GetState(&hi2c1) != HAL_I2C_STATE_READY) {
     MX_I2C1_Init(); // réinitialiser le bus I2C si nécessaire
@@ -171,36 +179,52 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_SET);
   MX_GPIO_EXTI_Init();
-
+  
+  
   /* Initialize the VEML6030 light sensor */
   VEML6030_RegisterBusIO(&veml6030, &veml6030_io);
-
+  
   if (VEML6030_Init(&veml6030) != VEML6030_OK) {
     Error_Handler();
   }
-
+  
   VEML6030_SetExposureTime(&veml6030, VEML6030_CONF_IT100); // Set exposure time to 100ms
   VEML6030_SetGain(&veml6030, VEML6030_ALS_CHANNEL, VEML6030_CONF_GAIN_1); // Set gain for channel 1 to 1x
   VEML6030_Start(&veml6030, VEML6030_MODE_CONTINUOUS); // Start continuous measurement
-
+  
   /* Display power-on sequence: DISP high after 10ms, backlight on after 250ms */
   Display_Init();
-
+  
   /* Start lap timer (TIM2 CH1 input capture on PA0) */
   HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
   /* USER CODE END 2 */
+  xTaskCreate(vTaskLED, "TaskLED", configMINIMAL_STACK_SIZE * 2, NULL, 2, NULL);
 
+  vTaskStartScheduler(); // Start FreeRTOS scheduler
+  
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  // Should never be reached because the scheduler is running
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
   }
-  /* USER CODE END 3 */
+  /* USER CODE END WHILE */
 }
 
+void vTaskLED(void *pvParameters) {
+  while (1) {
+    WS2812B_SetAll(255, 0, 0); // Set all LEDs to red
+    vTaskDelay(pdMS_TO_TICKS(1000)); // Delay for 1 second
+    WS2812B_Clear(); // Clear all LEDs
+    vTaskDelay(pdMS_TO_TICKS(1000)); // Delay for 1 second
+  }
+}
+
+
+void vApplicationIdleHook(void) {
+  // This function is called when the system is idle
+  // You can put low-priority tasks here, like power-saving operations
+}
 /**
   * @brief System Clock Configuration
   * @retval None

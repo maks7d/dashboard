@@ -45,6 +45,43 @@ add_custom_command(
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
 
+# === FreeRTOS Integration ===
+# Path to FreeRTOS kernel
+set(FREERTOS_KERNEL_DIR ${CMAKE_SOURCE_DIR}/lib/FreeRTOS-Kernel-11.3.1/)
+
+# FreeRTOS sources - added directly to main target
+set(FREERTOS_SOURCES
+    ${FREERTOS_KERNEL_DIR}/tasks.c
+    ${FREERTOS_KERNEL_DIR}/queue.c
+    ${FREERTOS_KERNEL_DIR}/list.c
+    ${FREERTOS_KERNEL_DIR}/timers.c
+    ${FREERTOS_KERNEL_DIR}/event_groups.c
+    ${FREERTOS_KERNEL_DIR}/stream_buffer.c
+    ${FREERTOS_KERNEL_DIR}/portable/GCC/ARM_CM7/r0p1/port.c
+    ${FREERTOS_KERNEL_DIR}/portable/MemMang/heap_5.c
+)
+
+# FreeRTOS includes
+set(FREERTOS_INCLUDES
+    ${FREERTOS_KERNEL_DIR}/include
+    ${FREERTOS_KERNEL_DIR}/portable/GCC/ARM_CM7
+    ${FREERTOS_KERNEL_DIR}/portable/GCC/ARM_CM7/r0p1
+    ${FREERTOS_KERNEL_DIR}/portable/GCC
+    ${FREERTOS_KERNEL_DIR}/portable/Common
+    ${FREERTOS_KERNEL_DIR}/portable/MemMang
+)
+
+# Add FreeRTOS sources and includes to main target
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${FREERTOS_SOURCES})
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${FREERTOS_INCLUDES})
+
+# Force Thumb mode for all sources (critical for Cortex-M)
+set_source_files_properties(${FREERTOS_SOURCES} PROPERTIES COMPILE_FLAGS "-mthumb")
+set_source_files_properties(Core/Src/ws2812.c PROPERTIES COMPILE_FLAGS "-mthumb")
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+    $<$<CONFIG:Debug>:FREERTOS_DEBUG>
+)
+
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
@@ -52,7 +89,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user sources here
+    Core/Src/ws2812.c
 )
 
 # Add include paths
