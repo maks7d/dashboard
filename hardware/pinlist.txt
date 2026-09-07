@@ -1,0 +1,1034 @@
+Pinlist
+
+Exported from Carte-mere-dashboard v45.sch at 25/06/2026 20:22
+
+EAGLE Version 9.7.0 Copyright (c) 1988-2026 Autodesk, Inc.
+
+Part     Pad      Pin        Dir      Net
+
+BT1      N        NEG        pas      GND
+         P1       POS        pas      V_BCKP
+         P2       POS        pas      V_BCKP
+
+C1       1        1          pas      GND
+         2        2          pas      +3.3V
+
+C2       1        1          pas      +3.3V
+         2        2          pas      GND
+
+C3       1        1          pas      +3.3V
+         2        2          pas      GND
+
+C4       1        1          pas      GND
+         2        2          pas      +3.3V
+
+C5       1        1          pas      VBAT_FUSED
+         2        2          pas      GND
+
+C6       1        1          pas      +VCC
+         2        2          pas      GND
+
+C7       1        1          pas      +VCC
+         2        2          pas      GND
+
+C8       1        1          pas      GND
+         2        2          pas      +VBAT
+
+C9       1        1          pas      BTST
+         2        2          pas      SW_BMS
+
+C10      1        1          pas      VBUS
+         2        2          pas      GND
+
+C11      1        1          pas      REGN
+         2        2          pas      GND
+
+C12      1        1          pas      PMID
+         2        2          pas      GND
+
+C13      1        1          pas      SUPPLY_PMOS_GATE
+         2        2          pas      GND
+
+C14      1        1          pas      SNS
+         2        2          pas      GND
+
+C15      1        1          pas      +5V
+         2        2          pas      GND
+
+C16      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C17      1        1          pas      GND
+         2        2          pas      +3.3V
+
+C18      1        1          pas      VBST
+         2        2          pas      SW_BUCK
+
+C19      1        1          pas      GND
+         2        2          pas      +3.3V
+
+C20      1        1          pas      GND
+         2        2          pas      +3.3V
+
+C21      1        1          pas      GND
+         2        2          pas      +3.3V
+
+C22      1        1          pas      +5V_BUCK
+         2        2          pas      GND
+
+C23      1        1          pas      +5V_BUCK
+         2        2          pas      GND
+
+C24      1        1          pas      +VCC
+         2        2          pas      GND
+
+C25      1        1          pas      +VCC
+         2        2          pas      GND
+
+C26      1        1          pas      N$11
+         2        2          pas      VFB
+
+C27      1        1          pas      +5V
+         2        2          pas      GND
+
+C28      1        1          pas      +3.3V_ESP
+         2        2          pas      GND
+
+C29      1        1          pas      GND
+         2        2          pas      +3.3V_ESP
+
+C30      1        1          pas      GND
+         2        2          pas      +3.3V_ESP
+
+C31      1        1          pas      +5V
+         2        2          pas      GND
+
+C32      1        1          pas      N$6
+         2        2          pas      GND
+
+C33      1        1          pas      +3.3V_ESP
+         2        2          pas      GND
+
+C34      1        1          pas      +3.3V_ESP
+         2        2          pas      GND
+
+C35      1        1          pas      GND
+         2        2          pas      +3.3V_ESP
+
+C36      1        1          pas      EN_ESP32
+         2        2          pas      GND
+
+C37      1        1          pas      VLED+
+         2        2          pas      VLED-
+
+C38      1        1          pas      VLED+
+         2        2          pas      N$13
+
+C39      1        1          pas      VLED+
+         2        2          pas      GND
+
+C40      1        1          pas      VIN_DIO
+         2        2          pas      GND
+
+C41      1        1          pas      +5V
+         2        2          pas      GND
+
+C42      1        1          pas      +5V
+         2        2          pas      GND
+
+C43      1        1          pas      VIN_DIO
+         2        2          pas      GND
+
+C44      1        1          pas      VIN_DIO
+         2        2          pas      GND
+
+C45      1        1          pas      VIN_DIO
+         2        2          pas      GND
+
+C46      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C47      1        1          pas      OSC_IN
+         2        2          pas      GND
+
+C48      1        1          pas      OSC_OUT
+         2        2          pas      GND
+
+C49      1        1          pas      VCAP
+         2        2          pas      GND
+
+C50      1        1          pas      VCAP
+         2        2          pas      GND
+
+C51      1        1          pas      VDDA
+         2        2          pas      GND
+
+C52      1        1          pas      VDDA
+         2        2          pas      GND
+
+C53      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C54      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C55      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C56      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C57      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C58      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C59      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C60      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C61      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C62      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C63      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C64      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C65      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C66      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C67      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C68      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C69      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C70      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C71      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C72      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C73      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C74      1        1          pas      +3.3V
+         2        2          pas      GND
+
+C75      1        1          pas      GND
+         2        2          pas      +3.3V
+
+C76      1        1          pas      GND
+         2        2          pas      V_BCKP
+
+C77      1        1          pas      GND
+         2        2          pas      N$4
+
+D1       1        VDD        pwr      +5V
+         2        DOUT       out      N$2
+         3        VSS        pwr      GND
+         4        DIN        in       DIN
+
+D2       1        VDD        pwr      +5V
+         2        DOUT       out      N$7
+         3        VSS        pwr      GND
+         4        DIN        in       N$2
+
+D3       1        VDD        pwr      +5V
+         2        DOUT       out      N$8
+         3        VSS        pwr      GND
+         4        DIN        in       N$7
+
+D4       1        VDD        pwr      +5V
+         2        DOUT       out      N$9
+         3        VSS        pwr      GND
+         4        DIN        in       N$8
+
+D5       1        VDD        pwr      +5V
+         2        DOUT       out      N$10
+         3        VSS        pwr      GND
+         4        DIN        in       N$9
+
+D6       1        VDD        pwr      +5V
+         2        DOUT       out      N$12
+         3        VSS        pwr      GND
+         4        DIN        in       N$10
+
+D7       1        VDD        pwr      +5V
+         2        DOUT       out      N$14
+         3        VSS        pwr      GND
+         4        DIN        in       N$12
+
+D8       1        VDD        pwr      +5V
+         2        DOUT       out      N$15
+         3        VSS        pwr      GND
+         4        DIN        in       N$14
+
+D9       1        VDD        pwr      +5V
+         2        DOUT       out      N$16
+         3        VSS        pwr      GND
+         4        DIN        in       N$15
+
+D10      1        VDD        pwr      +5V
+         2        DOUT       out      DOUT
+         3        VSS        pwr      GND
+         4        DIN        in       N$16
+
+D11      A        A          pas      +5V_BUCK
+         C        C          pas      +5V
+
+D12      A        A          pas      +VBUS
+         C        C          pas      +5V
+
+D13      1        C          pas      VLED+
+         2        A          pas      LX
+
+F1       1        1          pas      +VBAT
+         2        2          pas      VBAT_FUSED
+
+FB1      1        1          pas      +5V
+         2        2          pas      VIN_DIO
+
+FB2      1        1          pas      VDDA
+         2        2          pas      +3.3V
+
+IC1      1        !CS        io       CS_FLASH
+         2        DO_(IO1_)  io       DO_IO1
+         3        !WP_(IO2_) io       WP_IO2
+         4        GND        io       GND
+         5        DI_(IO0_)  io       DI_IO0
+         6        CLK        io       CLK_FLASH
+         7        !HOLD_(IO3_) io       HOLD_IO3
+         8        VCC        io       +3.3V
+         9        EP         io       GND
+
+IC2      1        LX         io       LX
+         2        GND        io       GND
+         3        FB         io       VLED-
+         4        EN         io       BL_PWM
+         5        NC         nc                *** unconnected ***
+         6        VIN        io       VIN_DIO
+
+IC3      1        PE2        io       !PG
+         2        PE3        io       PWR_GPIO
+         3        PE4        io       LTDC_B0
+         4        PE5        io       LTDC_G0
+         5        PE6        io       LTDC_G1
+         6        VBAT       pwr      +3.3V
+         7        PI8        io                *** unconnected ***
+         8        PC13       io                *** unconnected ***
+         9        PC14-OSC32_IN io                *** unconnected ***
+         10       PC15-OSC32_OUT io                *** unconnected ***
+         11       PI9        io       LTDC_VSYNC
+         12       PI10       io       LTDC_HSYNC
+         13       PI11       io       LTDC_G6
+         14       VSS_1      pwr      GND
+         15       VDD_1      pwr      +3.3V
+         16       PF0        io                *** unconnected ***
+         17       PF1        io                *** unconnected ***
+         18       PF2        io                *** unconnected ***
+         19       PI12       io                *** unconnected ***
+         20       PI13       io                *** unconnected ***
+         21       PI14       io       LTDC_CLK
+         22       PF3        io                *** unconnected ***
+         23       PF4        io                *** unconnected ***
+         24       PF5        io                *** unconnected ***
+         25       VSS_2      pwr      GND
+         26       VDD_2      pwr      +3.3V
+         27       PF6        io       LEDS
+         28       PF7        io                *** unconnected ***
+         29       PF8        io                *** unconnected ***
+         30       PF9        io                *** unconnected ***
+         31       PF10       io       LTDC_DE
+         32       PH0-OSC_IN io       OSC_IN
+         33       PH1-OSC_OUT io       OSC_OUT
+         34       NRST       io       NRST
+         35       PC0        io       LTDC_R5
+         36       PC1        io                *** unconnected ***
+         37       PC2_C      io                *** unconnected ***
+         38       PC3_C      io                *** unconnected ***
+         39       VDD_3      pwr      +3.3V
+         40       VSSA       pwr      GND
+         41       VREF+      io       VDDA
+         42       VDDA       pwr      VDDA
+         43       PA0-WKUP   io       LAP_DET
+         44       PA1        io       LTDC_R2
+         45       PA2        io       TX_TO_ESP
+         46       PH2        io       LTDC_R0
+         47       PH3        io       LTDC_R1
+         48       PH4        io       LTDC_G5
+         49       PH5        io                *** unconnected ***
+         50       PA3        io       RX_TO_ESP
+         51       VSS_3      pwr      GND
+         52       VDD_4      pwr      +3.3V
+         53       PA4        io       SPI_NSS
+         54       PA5        io       LTDC_R4
+         55       PA6        io       LTDC_G2
+         56       PA7        io       SPI_MOSI
+         57       PC4        io       VBAT_SENS
+         58       PC5        io       VBAT_MID_SENS
+         59       VDD_5      pwr      +3.3V
+         60       VSS_4      pwr      GND
+         61       PB0        io       LTDC_R3
+         62       PB1        io       LTDC_R6
+         63       PB2        io                *** unconnected ***
+         64       PI15       io                *** unconnected ***
+         65       PJ0        io       LTDC_R7
+         66       PJ1        io                *** unconnected ***
+         67       PJ2        io                *** unconnected ***
+         68       PJ3        io                *** unconnected ***
+         69       PJ4        io                *** unconnected ***
+         70       PF11       io                *** unconnected ***
+         71       PF12       io                *** unconnected ***
+         72       VSS_5      pwr      GND
+         73       VDD_6      pwr      +3.3V
+         74       PF13       io                *** unconnected ***
+         75       PF14       io       ILIM
+         76       PF15       io       STAT
+         77       PG0        io       CD_BQ25
+         78       PG1        io       !INT_BQ
+         79       PE7        io       PSEL
+         80       PE8        io                *** unconnected ***
+         81       PE9        io                *** unconnected ***
+         82       VSS_6      pwr      GND
+         83       VDD_7      pwr      +3.3V
+         84       PE10       io                *** unconnected ***
+         85       PE11       io       LTDC_G3
+         86       PE12       io       LTDC_B4
+         87       PE13       io                *** unconnected ***
+         88       PE14       io                *** unconnected ***
+         89       PE15       io                *** unconnected ***
+         90       PB10       io       LTDC_G4
+         91       PB11       io       BL_PWM
+         92       VCAP1      pwr      VCAP
+         93       VSS_7      pwr      GND
+         94       VDD_8      pwr      +3.3V
+         95       PJ5        io                *** unconnected ***
+         96       PH6        io                *** unconnected ***
+         97       PH7        io       DISP
+         98       PH8        io                *** unconnected ***
+         99       PH9        io                *** unconnected ***
+         100      PH10       io                *** unconnected ***
+         101      PH11       io                *** unconnected ***
+         102      PH12       io                *** unconnected ***
+         103      VDD_9      pwr      +3.3V
+         104      PB12       io                *** unconnected ***
+         105      PB13       io                *** unconnected ***
+         106      PB14       io       GNSS_RX
+         107      PB15       io       GNSS_TX
+         108      PD8        io                *** unconnected ***
+         109      PD9        io                *** unconnected ***
+         110      PD10       io       LTDC_B3
+         111      PD11       io                *** unconnected ***
+         112      PD12       io                *** unconnected ***
+         113      PD13       io                *** unconnected ***
+         114      VSS_8      pwr      GND
+         115      VDD_10     pwr      +3.3V
+         116      PD14       io                *** unconnected ***
+         117      PD15       io                *** unconnected ***
+         118      PJ6        io                *** unconnected ***
+         119      PJ7        io                *** unconnected ***
+         120      PJ8        io                *** unconnected ***
+         121      PJ9        io                *** unconnected ***
+         122      PJ10       io       EN_ESP32
+         123      PJ11       io                *** unconnected ***
+         124      VDD_11     pwr      +3.3V
+         125      VSS_9      pwr      GND
+         126      PK0        io                *** unconnected ***
+         127      PK1        io                *** unconnected ***
+         128      PK2        io       LTDC_G7
+         129      PG2        io                *** unconnected ***
+         130      PG3        io                *** unconnected ***
+         131      PG4        io                *** unconnected ***
+         132      PG5        io       SW4
+         133      PG6        io       SW3
+         134      PG7        io       PWR_ON_SW
+         135      PG8        io       SW1
+         136      VSS_10     pwr      GND
+         137      VDD33_USB  pwr      +3.3V
+         138      PC6        io                *** unconnected ***
+         139      PC7        io                *** unconnected ***
+         140      PC8        io       DAT0
+         141      PC9        io       DAT1
+         142      PA8        io                *** unconnected ***
+         143      PA9        io                *** unconnected ***
+         144      PA10       io       LTDC_B1
+         145      PA11       io       STM_DN
+         146      PA12       io       STM_DP
+         147      PA13       io       SWDIO
+         148      VCAP2      pwr      VCAP
+         149      VSS_11     pwr      GND
+         150      VDD_12     pwr      +3.3V
+         151      PH13       io                *** unconnected ***
+         152      PH14       io                *** unconnected ***
+         153      PH15       io                *** unconnected ***
+         154      PI0        io                *** unconnected ***
+         155      PI1        io                *** unconnected ***
+         156      PI2        io                *** unconnected ***
+         157      PI3        io       GND
+         158      VDD_13     pwr      +3.3V
+         159      PA14       io       SWCLK
+         160      PA15       io       JTDI
+         161      PC10       io       DAT2
+         162      PC11       io       DAT3
+         163      PC12       io       CLK_SD
+         164      PD0        io                *** unconnected ***
+         165      PD1        io                *** unconnected ***
+         166      PD2        io       CMD_SD
+         167      PD3        io                *** unconnected ***
+         168      PD4        io                *** unconnected ***
+         169      PD5        io                *** unconnected ***
+         170      VSS_12     pwr      GND
+         171      VDD_14     pwr      +3.3V
+         172      PD6        io       LTDC_B2
+         173      PD7        io                *** unconnected ***
+         174      PJ12       io                *** unconnected ***
+         175      PJ13       io                *** unconnected ***
+         176      PJ14       io                *** unconnected ***
+         177      PJ15       io                *** unconnected ***
+         178      PG9        io       SPI_MISO
+         179      PG10       io                *** unconnected ***
+         180      PG11       io       SPI_SCK
+         181      PG12       io                *** unconnected ***
+         182      PG13       io                *** unconnected ***
+         183      PG14       io                *** unconnected ***
+         184      VSS_13     pwr      GND
+         185      VDD_15     pwr      +3.3V
+         186      PK3        io                *** unconnected ***
+         187      PK4        io       LTDC_B5
+         188      PK5        io       LTDC_B6
+         189      PK6        io       LTDC_B7
+         190      PK7        io                *** unconnected ***
+         191      PG15       io                *** unconnected ***
+         192      PB3        io       SWO
+         193      PB4        io                *** unconnected ***
+         194      PB5        io       BUZZER
+         195      PB6        io       I2C1_SCL
+         196      PB7        io       I2C1_SDA
+         197      BOOT0      io       BOOT0
+         198      PB8        io       CD_SD
+         199      PB9        io                *** unconnected ***
+         200      PE0        io       IMU_INT1
+         201      PE1        io                *** unconnected ***
+         202      VSS_14     pwr      GND
+         203      PDR_ON     io       PDR_ON
+         204      VDD_16     pwr      +3.3V
+         205      PI4        io       INT_LIGHT_SENSOR
+         206      PI5        io                *** unconnected ***
+         207      PI6        io                *** unconnected ***
+         208      PI7        io                *** unconnected ***
+
+J1       1        1          io       +VBAT
+         2        2          io       VBAT_MID
+         3        3          io       N$5
+
+J2       1        SIGNAL     io       RF_IN
+         2        GND_1      io       GND
+         3        GND        io       GND
+
+J3       1        DAT2       io       DAT2
+         2        CD/DAT3    io       DAT3
+         3        CMD        io       CMD_SD
+         4        VDD        pwr      +3.3V
+         5        CLK        in       CLK_SD
+         6        VSS        pwr      GND
+         7        DAT0       io       DAT0
+         8        DAT1       io       DAT1
+         CD       CD         pas      CD_SD
+         G1       COVER_GND  pwr      GND
+         G2       COVER_GND  pwr      GND
+         G3       COVER_GND  pwr      GND
+         G4       COVER_GND  pwr      GND
+
+J4       A5       CC1        io       CC1
+         A6       DP1        io       USB_DP
+         A7       DN1        io       USB_DN
+         A8       SBU1       io                *** unconnected ***
+         B5       CC2        io       CC2
+         B6       DP2        io       USB_DP
+         B7       DN2        io       USB_DN
+         B8       SBU2       io                *** unconnected ***
+         SH1      SHELL_GND  pwr      GND
+         SH2      SHELL_GND  pwr      GND
+         SH3      SHELL_GND  pwr      GND
+         SH4      SHELL_GND  pwr      GND
+         A4_B9    VBUS       pwr      +VBUS
+         B4_A9    VBUS       pwr      +VBUS
+         A1_B12   GND        pwr      GND
+         B1_A12   GND        pwr      GND
+
+J5       1        1          pas      VLED-
+         2        2          pas      VLED+
+         3        3          pas      GND
+         4        4          pas      +3.3V_ESP
+         5        5          pas      LTDC_R0
+         6        6          pas      LTDC_R1
+         7        7          pas      LTDC_R2
+         8        8          pas      LTDC_R3
+         9        9          pas      LTDC_R4
+         10       10         pas      LTDC_R5
+         11       11         pas      LTDC_R6
+         12       12         pas      LTDC_R7
+         13       13         pas      LTDC_G0
+         14       14         pas      LTDC_G1
+         15       15         pas      LTDC_G2
+         16       16         pas      LTDC_G3
+         17       17         pas      LTDC_G4
+         18       18         pas      LTDC_G5
+         19       19         pas      LTDC_G6
+         20       20         pas      LTDC_G7
+         21       21         pas      LTDC_B0
+         22       22         pas      LTDC_B1
+         23       23         pas      LTDC_B2
+         24       24         pas      LTDC_B3
+         25       25         pas      LTDC_B4
+         26       26         pas      LTDC_B5
+         27       27         pas      LTDC_B6
+         28       28         pas      LTDC_B7
+         29       29         pas      GND
+         30       30         pas      LTDC_CLK
+         31       31         pas      LTDC_DISP
+         32       32         pas      LTDC_HSYNC
+         33       33         pas      LTDC_VSYNC
+         34       34         pas      LTDC_DE
+         35       35         pas               *** unconnected ***
+         36       36         pas      GND
+         37       37         pas               *** unconnected ***
+         38       38         pas               *** unconnected ***
+         39       39         pas               *** unconnected ***
+         40       40         pas               *** unconnected ***
+
+JP1      1        1          pas      SWO
+         2        2          pas      SWCLK
+         3        3          pas      JTDI
+         4        4          pas      SWDIO
+         5        5          pas      +3.3V
+         6        6          pas      GND
+
+L1       1        1          pas      SW_BMS
+         2        2          pas      PMID
+
+L2       1        1          pas      SW_BUCK
+         2        2          pas      +5V_BUCK
+
+L3       1        1          io       LX
+         2        2          io       VIN_DIO
+
+L4       1        1          pas      RF_IN
+         2        2          pas      N$4
+
+Q1       1        G          pas      SUPPLY_PMOS_GATE
+         2        S          pas      VBAT_FUSED
+         3        D          pas      +VCC
+
+Q2       1        G          pas      BUZZER
+         2        S          pas      GND
+         3        D          pas      N$1
+
+Q3       1        B          pas      N$3
+         2        E          pas      GND
+         3        C          pas      SUPPLY_PMOS_GATE
+
+R1       1        1          pas      DIN
+         2        2          pas      LEDS
+
+R2       1        1          pas      VBAT_SENS
+         2        2          pas      +VBAT
+
+R3       1        1          pas      VBAT_MID_SENS
+         2        2          pas      VBAT_MID
+
+R4       1        1          pas      GND
+         2        2          pas      VBAT_SENS
+
+R5       1        1          pas      GND
+         2        2          pas      VBAT_MID_SENS
+
+R6       1        1          pas      SW1
+         2        2          pas      +3.3V
+
+R7       1        1          pas      PWR_ON_SW
+         2        2          pas      +3.3V
+
+R8       1        1          pas      SUPPLY_PMOS_GATE
+         2        2          pas      VBAT_FUSED
+
+R9       1        1          pas      +3.3V
+         2        2          pas      RST_M9N
+
+R10      1        1          pas      +3.3V
+         2        2          pas      CMD_SD
+
+R11      1        1          pas      CBSET
+         2        2          pas      VBAT_MID
+
+R12      1        1          pas      +3.3V
+         2        2          pas      DAT0
+
+R13      1        1          pas      SW3
+         2        2          pas      +3.3V
+
+R14      1        1          pas      SW4
+         2        2          pas      +3.3V
+
+R15      1        1          pas      SUPPLY_PMOS_GATE
+         2        2          pas      PWR_ON_SW
+
+R16      1        1          pas      !PG
+         2        2          pas      +3.3V
+
+R17      1        1          pas      +3.3V
+         2        2          pas      DAT1
+
+R18      1        1          pas      TS
+         2        2          pas      REGN
+
+R19      1        1          pas      STAT
+         2        2          pas      +3.3V
+
+R20      1        1          pas      +3.3V
+         2        2          pas      DAT2
+
+R21      1        1          pas      +3.3V
+         2        2          pas      DAT3
+
+R22      1        1          pas      !INT_BQ
+         2        2          pas      +3.3V
+
+R23      1        1          pas      +3.3V
+         2        2          pas      CD_SD
+
+R24      1        1          pas      GND
+         2        2          pas      ILIM
+
+R25      1        1          pas      GND
+         2        2          pas      TS
+
+R26      1        1          pas      VBAT_MID
+         2        2          pas      MID
+
+R27      1        1          pas      N$3
+         2        2          pas      PWR_GPIO
+
+R28      1        1          pas      GND
+         2        2          pas      CC1
+
+R29      1        1          pas      GND
+         2        2          pas      CC2
+
+R30      1        1          pas      CS_FLASH
+         2        2          pas      +3.3V
+
+R31      1        1          pas      EN_BUCK
+         2        2          pas      +VCC
+
+R32      1        1          pas      N$11
+         2        2          pas      +5V_BUCK
+
+R33      1        1          pas      EN_BUCK
+         2        2          pas      GND
+
+R34      1        1          pas      VFB
+         2        2          pas      N$11
+
+R35      1        1          pas      VFB
+         2        2          pas      GND
+
+R36      1        1          pas      BOOT
+         2        2          pas      +3.3V
+
+R37      1        1          pas      NRST
+         2        2          pas      +3.3V
+
+R38      1        1          pas      GND
+         2        2          pas      BOOT0
+
+R39      1        1          pas      GND
+         2        2          pas      EN_ESP32
+
+R40      1        1          pas      PDR_ON
+         2        2          pas      +3.3V
+
+R41      1        1          pas      TX_TO_ESP
+         2        2          pas      RX1_ESP
+
+R42      1        1          pas      RX_TO_ESP
+         2        2          pas      TX1_ESP
+
+R43      1        1          pas      GND
+         2        2          pas      VLED-
+
+R44      1        1          pas      I2C1_SCL
+         2        2          pas      +3.3V
+
+R45      1        1          pas      I2C1_SDA
+         2        2          pas      +3.3V
+
+R46      1        1          pas      N$4
+         2        2          pas      VCC_RF
+
+RT1      1        1          io       TS
+         2        2          io       GND
+
+S1       1        1          io       GND
+         2        2          io       SW1
+
+S2       1        1          io       GND
+         2        2          io       PWR_ON_SW
+
+S3       1        1          io       GND
+         2        2          io       SW3
+
+S4       1        1          io       GND
+         2        2          io       SW4
+
+S5       1        1          io       BOOT0
+         2        2          io       +3.3V
+
+S6       1        1          io       BOOT
+         2        2          io       GND
+
+S7       1        1          io       NRST
+         2        2          io       GND
+
+TP1      1        1          io       GND
+
+TP2      1        1          io       GND
+
+TP3      1        1          io       +VBAT
+
+TP4      1        1          io       +VCC
+
+TP5      1        1          io       +5V_BUCK
+
+TP6      1        1          io       +5V
+
+TP7      1        1          io       +3.3V
+
+TP8      1        1          io       I2C1_SCL
+
+TP9      1        1          io       I2C1_SDA
+
+TP10     1        1          io       BUZZER
+
+TP11     1        1          io       GNSS_TX
+
+TP12     1        1          io       GNSS_RX
+
+TP13     1        1          io       PWR_GPIO
+
+TP14     1        1          io       RX1_ESP
+
+TP15     1        1          io       TX1_ESP
+
+U$1      P$1      GND        io       N$5
+         P$2      VBAT+      io       +VBAT
+         P$3      VBAT_MID   io       VBAT_MID
+
+U$2      1        P$1        io       +VCC
+         2        P$2        io       N$1
+
+U$3      1        DM4        io       GNSS_DN
+         2        DP4        io       GNSS_DP
+         3        DM3        io       DW3000_DN
+         4        DP3        io       DW3000_DP
+         5        DM2        io       ESP_DN
+         6        DP2        io       ESP_DP
+         7        DM1        io       STM_DN
+         8        DP1        io       STM_DP
+         9        RST/CDP    io                *** unconnected ***
+         10       DMU        io       USB_DN
+         11       DPU        io       USB_DP
+         12       V5         io       +5V
+         13       VDD33      io       N$6
+         14       GND        io       GND
+         15       XO         io                *** unconnected ***
+         16       XI         io       GND
+
+U$4      1        1          io       TXD0
+         2        2          io       RXD0
+
+U$5      1        RUN_LED    io                *** unconnected ***
+         2        TX2        io                *** unconnected ***
+         3        RX2        io                *** unconnected ***
+         4        TX_LED     io                *** unconnected ***
+         5        RX_LED     io                *** unconnected ***
+         6        TX1        io                *** unconnected ***
+         7        RX1        io                *** unconnected ***
+         8        GND        io                *** unconnected ***
+         9        GND        io                *** unconnected ***
+         10       GND        io                *** unconnected ***
+         11       SWDIO      io                *** unconnected ***
+         12       SWCLK      io                *** unconnected ***
+         13       SCL        io                *** unconnected ***
+         14       SDA        io                *** unconnected ***
+         15       3V3        io                *** unconnected ***
+         16       3V3        io                *** unconnected ***
+
+U1       1        SDO        io       SPI_MISO
+         2        ASDX       io                *** unconnected ***
+         3        ASCX       io                *** unconnected ***
+         4        INT1       io       IMU_INT1
+         5        VDDIO      pwr      +3.3V
+         6        GNDIO      pwr      GND
+         7        GND        pwr      GND
+         8        VDD        pwr      +3.3V
+         9        INT2       io                *** unconnected ***
+         10       OSCB       in                *** unconnected ***
+         11       OSDO       out               *** unconnected ***
+         12       CSB        in       SPI_NSS
+         13       SCX        in       SPI_SCK
+         14       SDX        io       SPI_MOSI
+
+U2       1        !PG        out      !PG
+         2        STAT       out      STAT
+         3        CD         in       CD_BQ25
+         4        SDA        io       I2C1_SDA
+         5        SCL        in       I2C1_SCL
+         6        !INT       out      !INT_BQ
+         7        TS         in       TS
+         8        ILIM       in       ILIM
+         9        MID        in       MID
+         10       CBSET      pwr      CBSET
+         11       REGN       pwr      REGN
+         12       BTST       pwr      BTST
+         13       BAT        pwr      +VBAT
+         14       BAT        pwr      +VBAT
+         15       SNS        out      SNS
+         16       SNS        out      SNS
+         17       SW         pwr      SW_BMS
+         18       SW         pwr      SW_BMS
+         19       GND        pwr      GND
+         20       GND        pwr      GND
+         21       PMID       pwr      PMID
+         22       PMID       pwr      PMID
+         23       VBUS       pwr      VBUS
+         24       PSEL       in       PSEL
+         25       EXP        pas      GND
+         26       EXP        pas      GND
+         27       EXP        pas      GND
+         28       EXP        pas      GND
+         29       EXP        pas      GND
+         30       EXP        pas      GND
+
+U3       1        SAFEBOOT_N in                *** unconnected ***
+         2        D_SEL      in                *** unconnected ***
+         3        TIMEPULSE  out      TIMEPULSE
+         4        EXTINT     in                *** unconnected ***
+         5        USB_DM     io       GNSS_DN
+         6        USB_DP     io       GNSS_DP
+         7        V_USB      pwr      GND
+         8        RESET_N    in       RST_M9N
+         9        VCC_RF     pwr      VCC_RF
+         10       GND        pwr      GND
+         11       RF_IN      in       RF_IN
+         12       GND        pwr      GND
+         13       GND        pwr      GND
+         14       LNA_EN     out               *** unconnected ***
+         15       RESERVED   nc                *** unconnected ***
+         16       RESERVED   nc                *** unconnected ***
+         17       RESERVED   nc                *** unconnected ***
+         18       SDA/SPI_CS_N io       I2C1_SDA
+         19       SCL/SPI_CLK io       I2C1_SCL
+         20       TXD/SPI_MISO out      GNSS_TX
+         21       RXD/SPI_MOSI in       GNSS_RX
+         22       V_BCKP     pwr      V_BCKP
+         23       VCC        pwr      +3.3V
+         24       GND        pwr      GND
+
+U4       1        IN         in       +5V
+         2        GND        pwr      GND
+         3        EN         in       +5V
+         5        OUT        out      +3.3V
+
+U5       1        GND        pwr      GND
+         2        SDA        io       I2C1_SDA
+         3        INT        out      INT_LIGHT_SENSOR
+         4        ADDR       io                *** unconnected ***
+         5        SCL        in       I2C1_SCL
+         6        VDD        pwr      +3.3V
+
+U6       1        GND        pwr      GND
+         2        SW         out      SW_BUCK
+         3        VIN        in       +VCC
+         4        VFB        in       VFB
+         5        EN         in       EN_BUCK
+         6        VBST       pwr      VBST
+
+U7       1        IN         in       +5V
+         2        GND        pwr      GND
+         3        EN         in       +5V
+         5        OUT        out      +3.3V_ESP
+
+U8       1        GND        pwr      GND
+         2        3V3        pwr      +3.3V_ESP
+         3        EN         in       EN_ESP32
+         4        IO4        io       RX1_ESP
+         5        IO5        io       TX1_ESP
+         6        IO6        io                *** unconnected ***
+         7        IO7        io                *** unconnected ***
+         8        IO15       io                *** unconnected ***
+         9        IO16       io                *** unconnected ***
+         10       IO17       io                *** unconnected ***
+         11       IO18       io                *** unconnected ***
+         12       IO8        io                *** unconnected ***
+         13       IO19       io       ESP_DN
+         14       IO20       io       ESP_DP
+         15       IO3        io                *** unconnected ***
+         16       IO46       io                *** unconnected ***
+         17       IO9        io                *** unconnected ***
+         18       IO10       io                *** unconnected ***
+         19       IO11       io                *** unconnected ***
+         20       IO12       io                *** unconnected ***
+         21       IO13       io                *** unconnected ***
+         22       IO14       io                *** unconnected ***
+         23       IO21       io                *** unconnected ***
+         24       IO47       io                *** unconnected ***
+         25       IO48       io                *** unconnected ***
+         26       IO45       io                *** unconnected ***
+         27       IO0        io       BOOT
+         28       IO35       io                *** unconnected ***
+         29       IO36       io                *** unconnected ***
+         30       IO37       io                *** unconnected ***
+         31       IO38       io                *** unconnected ***
+         32       IO39       io                *** unconnected ***
+         33       IO40       io                *** unconnected ***
+         34       IO41       io                *** unconnected ***
+         35       IO42       io                *** unconnected ***
+         36       RXD0       io       RXD0
+         37       TXD0       io       TXD0
+         38       IO2        io                *** unconnected ***
+         39       IO1        io                *** unconnected ***
+         40       GND        pwr      GND
+         41_1     GND        pwr      GND
+         41_2     GND        pwr      GND
+         41_3     GND        pwr      GND
+         41_4     GND        pwr      GND
+         41_5     GND        pwr      GND
+         41_6     GND        pwr      GND
+         41_7     GND        pwr      GND
+         41_8     GND        pwr      GND
+         41_9     GND        pwr      GND
+
+Y1       1        XTAL_IN/OUT io       OSC_IN
+         2        GND        io       GND
+         3        XTAL_OUT/IN io       OSC_OUT
+         4        GND        io       GND
+
