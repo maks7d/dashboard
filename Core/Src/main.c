@@ -28,6 +28,7 @@
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
+#include "fdcan.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "ws2812.h"
@@ -45,7 +46,11 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+typedef struct {
+  uint32_t Identifier;
+  uint8_t  DataLength; // nombre d'octets (0-8 en Classic CAN)
+  uint8_t  Data[8];
+} CAN_Frame_t;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -81,6 +86,8 @@ static volatile uint8_t  power_btn_held = 0;
 static QueueHandle_t xLapTimeQueue = NULL; // Queue for lap timer ticks
 static volatile uint32_t uLastCaptureTime = 0; // Last capture time for lap timer (in FreeRTOS ticks, needs conversion according to FreeRTOSconfig.h hz rate)
 static QueueHandle_t xPowerButtonQueue = NULL;  // Queue pour les événements du bouton
+static QueueHandle_t xCanRxQueue = NULL;        // Queue pour les trames FDCAN1 reçues
+static TaskHandle_t xTaskCANHandle = NULL;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -91,6 +98,8 @@ void PeriphCommonClock_Config(void);
 void vTaskLightSensor(void *pvParameters);    // Lecture du VEML6030
 void vTaskDisplay(void *pvParameters);         // Gestion de l'affichage
 void vTaskPowerButton(void *pvParameters);    // Gestion du bouton power
+void vTaskCAN(void *pvParameters);            // Traitement des trames FDCAN1 reçues
+HAL_StatusTypeDef CAN_SendMessage(uint32_t Identifier, uint8_t *pData, uint8_t DataLength);
 
 // ===== Callbacks HAL modifiés =====
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
@@ -205,11 +214,31 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM2_Init();
   MX_TIM16_Init();
+  MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_SET);
   MX_GPIO_EXTI_Init();
   xPowerButtonQueue = xQueueCreate(5, sizeof(uint32_t));
   if (xPowerButtonQueue == NULL) { Error_Handler(); }
+  xCanRxQueue = xQueueCreate(16, sizeof(CAN_Frame_t));
+  if (xCanRxQueue == NULL) { Error_Handler(); }
+
+  // ===== Initialisation FDCAN1 =====
+  // Filtre standard : accepte tous les ID (mask=0) vers la RX FIFO0
+  FDCAN_FilterTypeDef sCanFilter = {0};
+  sCanFilter.IdType = FDCAN_STANDARD_ID;
+  sCanFilter.FilterIndex = 0;
+  sCanFilter.FilterType = FDCAN_FILTER_MASK;
+  sCanFilter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;
+  sCanFilter.FilterID1 = 0x000;
+  sCanFilter.FilterID2 = 0x000;
+  if (HAL_FDCAN_ConfigFilter(&hfdcan1, &sCanFilter) != HAL_OK) { Error_Handler(); }
+  // Trames non filtrées / étendues / remote : rejetées
+  if (HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_REJECT, FDCAN_REJECT,
+                                    FDCAN_FILTER_REMOTE, FDCAN_FILTER_REMOTE) != HAL_OK) { Error_Handler(); }
+  if (HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK) { Error_Handler(); }
+  if (HAL_FDCAN_Start(&hfdcan1) != HAL_OK) { Error_Handler(); }
+
   // ===== Initialisation FreeRTOS Objects =====
   // Créer une queue pour les temps de tour (10 éléments max)
   xLapTimeQueue = xQueueCreate(10, sizeof(uint32_t));
@@ -253,6 +282,9 @@ int main(void)
 
   // Tâche LED (priorité basse, car cosmétique)
   xTaskCreate(vTaskLED, "TaskLED", configMINIMAL_STACK_SIZE * 2, NULL, 1, NULL);
+
+  // Tâche CAN (priorité moyenne-haute, dépile les trames reçues)
+  xTaskCreate(vTaskCAN, "CAN", configMINIMAL_STACK_SIZE * 4, NULL, 3, &xTaskCANHandle);
   /* USER CODE END 2 */
 
   vTaskStartScheduler(); // Start FreeRTOS scheduler
@@ -420,6 +452,22 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
   portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs) {
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+  if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != 0) {
+    FDCAN_RxHeaderTypeDef RxHeader;
+    CAN_Frame_t frame;
+
+    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, frame.Data) == HAL_OK) {
+      frame.Identifier = RxHeader.Identifier;
+      frame.DataLength = (uint8_t)(RxHeader.DataLength >> 16); // DLC (0-8) encodé dans les bits [19:16]
+      xQueueSendFromISR(xCanRxQueue, &frame, &xHigherPriorityTaskWoken);
+    }
+  }
+  portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
 void HAL_SYSTICK_Callback(void) {
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   if (power_btn_held && (xTaskGetTickCount() - power_btn_press_tick >= pdMS_TO_TICKS(5000))) {
@@ -507,6 +555,29 @@ void vTaskPowerButton(void *pvParameters) {
       }
     }
   }
+}
+
+void vTaskCAN(void *pvParameters) {
+  CAN_Frame_t frame;
+  while (1) {
+    if (xQueueReceive(xCanRxQueue, &frame, portMAX_DELAY) == pdPASS) {
+      // TODO: décoder la trame (frame.Identifier, frame.Data, frame.DataLength)
+    }
+  }
+}
+
+HAL_StatusTypeDef CAN_SendMessage(uint32_t Identifier, uint8_t *pData, uint8_t DataLength) {
+  FDCAN_TxHeaderTypeDef TxHeader = {0};
+  TxHeader.Identifier = Identifier;
+  TxHeader.IdType = FDCAN_STANDARD_ID;
+  TxHeader.TxFrameType = FDCAN_DATA_FRAME;
+  TxHeader.DataLength = ((uint32_t)DataLength) << 16; // DLC encodé dans les bits [19:16]
+  TxHeader.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
+  TxHeader.BitRateSwitch = FDCAN_BRS_OFF;
+  TxHeader.FDFormat = FDCAN_CLASSIC_CAN;
+  TxHeader.TxEventFifoControl = FDCAN_NO_TX_EVENTS;
+  TxHeader.MessageMarker = 0;
+  return HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader, pData);
 }
 
 #ifdef USE_FULL_ASSERT

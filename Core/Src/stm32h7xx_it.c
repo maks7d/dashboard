@@ -61,6 +61,7 @@ extern void xPortSysTickHandler(void);
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim2;
+extern FDCAN_HandleTypeDef hfdcan1;
 /* USER CODE BEGIN EV */
 extern DMA_HandleTypeDef hdma_tim16_ch1;
 /* USER CODE END EV */
@@ -218,6 +219,11 @@ void TIM2_IRQHandler(void)
   /* USER CODE BEGIN TIM2_IRQn 1 */
 
   /* USER CODE END TIM2_IRQn 1 */
+}
+
+void FDCAN1_IT0_IRQHandler(void)
+{
+  HAL_FDCAN_IRQHandler(&hfdcan1);
 }
 
 /* USER CODE BEGIN 1 */

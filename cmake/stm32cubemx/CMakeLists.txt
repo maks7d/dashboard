@@ -38,6 +38,7 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../startup_stm32h743xx.s
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/veml6030.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/veml6030_reg.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/fdcan.c
 )
 
 # STM32 HAL/LL Drivers
@@ -78,6 +79,7 @@ set(STM32_Drivers_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd_ex.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_usb.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c
 )
 
 # Drivers Midllewares

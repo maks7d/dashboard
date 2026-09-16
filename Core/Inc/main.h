@@ -68,6 +68,9 @@ void Error_Handler(void);
 #define DISP_PORT        GPIOH
 #define BL_PWM_PIN       GPIO_PIN_11  /* PB11 — DIO5661 EN (active high)     */
 #define BL_PWM_PORT      GPIOB
+
+#define CAN_STB_PIN      GPIO_PIN_15  /* PF15 — TJA1044 STB (bas = mode normal) */
+#define CAN_STB_PORT     GPIOF
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

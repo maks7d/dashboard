@@ -62,6 +62,9 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_SET);
 
+  /*Configure GPIO pin Output Level : PF15 (TJA1044 STB, bas = mode normal) */
+  HAL_GPIO_WritePin(CAN_STB_PORT, CAN_STB_PIN, GPIO_PIN_RESET);
+
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOJ, GPIO_PIN_10, GPIO_PIN_RESET);
 
@@ -92,6 +95,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(POWER_BTN_PORT, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PF15 (TJA1044 STB) */
+  GPIO_InitStruct.Pin = CAN_STB_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(CAN_STB_PORT, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PJ10 (EN ESP32) */
   GPIO_InitStruct.Pin = GPIO_PIN_10;
