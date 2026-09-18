@@ -1,0 +1,9 @@
+file(GLOB LFS_SOURCES CONFIGURE_DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/*.c
+)
+
+target_sources(${LFS_TARGET} PRIVATE ${LFS_SOURCES})
+
+target_include_directories(${LFS_TARGET} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)

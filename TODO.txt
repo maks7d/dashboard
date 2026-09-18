@@ -1,0 +1,1 @@
+- logs en binaire : struct avec fichier à decoder via py script et tout définir dans des struct. Ecrire dans les logs via la queue avec GetTick de freertos et reconstruire tiemstamps via script python. 

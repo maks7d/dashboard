@@ -75,6 +75,17 @@ set(FREERTOS_INCLUDES
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${FREERTOS_SOURCES})
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${FREERTOS_INCLUDES})
 
+# === littlefs Integration ===
+set(LITTLEFS_DIR ${CMAKE_SOURCE_DIR}/lib/little_fs)
+
+set(LITTLEFS_SOURCES
+    ${LITTLEFS_DIR}/lfs.c
+    ${LITTLEFS_DIR}/lfs_util.c
+)
+
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${LITTLEFS_SOURCES})
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LITTLEFS_DIR})
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb")
 
 # Force Thumb mode for all sources (critical for Cortex-M)

@@ -89,6 +89,9 @@ void Error_Handler(void);
 
 #define RPM_PIN          GPIO_PIN_15  /* PH15 — entrée capteur RPM (EXTI) */
 #define RPM_PORT         GPIOH
+
+#define CS_FLASH_GPIO_PIN  GPIO_PIN_0   /* PI0 — SPI2_CS, flash externe IC1 */
+#define CS_FLASH_GPIO_PORT GPIOI
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

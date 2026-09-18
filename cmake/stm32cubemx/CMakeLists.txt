@@ -39,6 +39,8 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/veml6030.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/veml6030_reg.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/fdcan.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/ws2812.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/w25n01g.c
 )
 
 # STM32 HAL/LL Drivers
