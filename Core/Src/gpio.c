@@ -65,8 +65,11 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level : PF15 (TJA1044 STB, bas = mode normal) */
   HAL_GPIO_WritePin(CAN_STB_PORT, CAN_STB_PIN, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOJ, GPIO_PIN_10, GPIO_PIN_RESET);
+  /*Configure GPIO pin Output Level : PI0 (SPI2_CS, flash externe IC1, idle haut) */
+  HAL_GPIO_WritePin(GPIOI, GPIO_PIN_0, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level : PH5 (EN ESP32) */
+  HAL_GPIO_WritePin(EN_ESP32_PORT, EN_ESP32_PIN, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
@@ -90,6 +93,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PF11 (VBCKP_ADC)*/
+  GPIO_InitStruct.Pin = GPIO_PIN_11;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
   /*Configure GPIO pin : PG (boutons poussoir de navigation)*/
   GPIO_InitStruct.Pin = POWER_BTN_PIN| GPIO_PIN_5| GPIO_PIN_6|GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
@@ -103,12 +112,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(CAN_STB_PORT, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PJ10 (EN ESP32) */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  /*Configure GPIO pin : PH5 (EN ESP32) */
+  GPIO_InitStruct.Pin = EN_ESP32_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
+  HAL_GPIO_Init(EN_ESP32_PORT, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PB5 (buzzer) */
   GPIO_InitStruct.Pin = GPIO_PIN_5;
@@ -141,6 +150,54 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF1_TIM16;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PI8 (EN_IP23, enable chargeur IP2312) */
+  GPIO_InitStruct.Pin = EN_IP23_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(EN_IP23_PORT, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PC13 (BAT_STAT, statut charge IP2312, sortie open-drain) */
+  GPIO_InitStruct.Pin = BAT_STAT_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(BAT_STAT_PORT, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PG2 (UWB_RST, reset module DW3000) */
+  GPIO_InitStruct.Pin = UWB_RST_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(UWB_RST_PORT, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB11 (BL_PWM, DIO5661 EN, actif haut) */
+  GPIO_InitStruct.Pin = BL_PWM_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BL_PWM_PORT, &GPIO_InitStruct);
+
+  /* Configure GPIO pin : PI0 (SPI2_CS, flash externe IC1, CS piloté en logiciel) */
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+  HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
+
+  /* Configure GPIO pin : PA0 (LAP_DET, capteur détection tour)
+     NB : pas de mode interruption ici, la ligne EXTI0 est déjà utilisée par PE0 (IMU_INT1).
+     Lecture en polling, ou réaffecter une des deux IT sur une autre broche si besoin. */
+  GPIO_InitStruct.Pin = LAP_DET_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LAP_DET_PORT, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PH15 (RPM, entrée capteur régime moteur) */
+  GPIO_InitStruct.Pin = RPM_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(RPM_PORT, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 2 */
@@ -154,5 +211,8 @@ void MX_GPIO_EXTI_Init(void)
 
   HAL_NVIC_SetPriority(EXTI4_IRQn, 7,0); // PI4 light sensor interrupt
   HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 8,0); // PH15 RPM interrupt
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 /* USER CODE END 2 */

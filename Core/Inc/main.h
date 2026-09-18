@@ -71,6 +71,24 @@ void Error_Handler(void);
 
 #define CAN_STB_PIN      GPIO_PIN_15  /* PF15 — TJA1044 STB (bas = mode normal) */
 #define CAN_STB_PORT     GPIOF
+
+#define EN_ESP32_PIN     GPIO_PIN_5   /* PH5 — enable ESP32 (actif haut) */
+#define EN_ESP32_PORT    GPIOH
+
+#define EN_IP23_PIN      GPIO_PIN_8   /* PI8 — enable chargeur IP2312 (U10) */
+#define EN_IP23_PORT     GPIOI
+
+#define BAT_STAT_PIN     GPIO_PIN_13  /* PC13 — statut charge IP2312 (sortie open-drain) */
+#define BAT_STAT_PORT    GPIOC
+
+#define LAP_DET_PIN      GPIO_PIN_0   /* PA0 — capteur détection tour */
+#define LAP_DET_PORT     GPIOA
+
+#define UWB_RST_PIN      GPIO_PIN_2   /* PG2 — reset module UWB (DW3000) */
+#define UWB_RST_PORT     GPIOG
+
+#define RPM_PIN          GPIO_PIN_15  /* PH15 — entrée capteur RPM (EXTI) */
+#define RPM_PORT         GPIOH
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

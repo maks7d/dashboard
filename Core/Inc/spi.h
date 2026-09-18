@@ -34,6 +34,7 @@ extern "C" {
 
 extern SPI_HandleTypeDef hspi1;
 extern DMA_HandleTypeDef hdma_spi1_rx;
+extern SPI_HandleTypeDef hspi2;
 
 /* USER CODE BEGIN Private defines */
 
@@ -42,7 +43,7 @@ extern DMA_HandleTypeDef hdma_spi1_rx;
 void MX_SPI1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void MX_SPI2_Init(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

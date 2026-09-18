@@ -206,12 +206,14 @@ int main(void)
   MX_LTDC_Init();
   MX_SDMMC1_SD_Init();
   MX_SPI1_Init();
+  MX_SPI2_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_ADC2_Init();
   MX_I2C1_Init();
+  MX_I2C2_Init();
   MX_TIM2_Init();
   MX_TIM16_Init();
   MX_FDCAN1_Init();
