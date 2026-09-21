@@ -1,6 +1,6 @@
 Pinlist
 
-Exported from Carte-mere-dashboard v14.sch at 18/09/2026 09:17
+Exported from Carte-mere-dashboard v16.sch at 21/09/2026 19:18
 
 EAGLE Version 9.7.0 Copyright (c) 1988-2026 Autodesk, Inc.
 
@@ -337,12 +337,6 @@ D10      1        VDD        pwr      +5V
          2        DOUT       out      DOUT
          3        VSS        pwr      GND
          4        DIN        in       N$16
-
-D11      A        A          pas      VCC
-         C        C          pas      +5V
-
-D12      A        A          pas      +VBUS
-         C        C          pas      +5V
 
 D13      1        C          pas      VLED+
          2        A          pas      LX
@@ -830,7 +824,7 @@ U6       1        GND        pwr      GND
          14       IO20       io       ESP_P
          15       IO3        io                *** unconnected ***
          16       IO46       io                *** unconnected ***
-         17       IO9        io                *** unconnected ***
+         17       IO9        io       UWB_RST
          18       IO10       io                *** unconnected ***
          19       IO11       io                *** unconnected ***
          20       IO12       io                *** unconnected ***
@@ -978,7 +972,7 @@ U8       1        PE2        io                *** unconnected ***
          103      VDD_9      pwr      +3.3V
          104      PD14       io                *** unconnected ***
          105      PD15       io                *** unconnected ***
-         106      PG2        io       UWB_RST
+         106      PG2        io                *** unconnected ***
          107      PG3        io                *** unconnected ***
          108      PG4        io                *** unconnected ***
          109      PG5        io       SW4
@@ -1107,6 +1101,18 @@ U11      1        LX         io       LX
          4        EN         io       BL_PWM
          5        NC         nc                *** unconnected ***
          6        VIN        io       VIN_DIO
+
+U12      1        VDD        io       VCC
+         2        GND        io       GND
+         3        EN         io       VCC
+         4        N.C.       nc                *** unconnected ***
+         5        OUT        io       +5V
+
+U13      1        VDD        io       +VBUS
+         2        GND        io       GND
+         3        EN         io       +VBUS
+         4        N.C.       nc                *** unconnected ***
+         5        OUT        io       +5V
 
 Y1       1        XTAL_IN/OUT io       OSC_IN
          2        GND        io       GND

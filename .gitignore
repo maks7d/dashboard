@@ -1,2 +1,4 @@
 build/*
 *.DS_Store
+*/bundles-lock.store.json
+*/bundles.store.json
