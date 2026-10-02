@@ -26,8 +26,9 @@ void Display_Init(void);
 void Display_PowerOff(void);
 
 /*
- * Brightness: 0=off (DIO5661 shutdown), 1-100=full on (GPIO only, no PWM dimming yet)
- * PWM dimming via LPTIM2 on PB11 can be added later for smooth control.
+ * Brightness: duty cycle of the PWM on the DIO5661 EN pin (PB11 = TIM2_CH4).
+ * 0 = off (EN low, DIO5661 shutdown), 100 = full brightness. Values > 100 are clamped.
+ * PWM is started by Display_Init(); calling this before has no visible effect.
  */
 void Display_SetBrightness(uint8_t percent);
 

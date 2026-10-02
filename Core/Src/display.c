@@ -1,5 +1,6 @@
 #include "display.h"
 #include "ltdc.h"
+#include "tim.h"
 #include <string.h>
 
 /*
@@ -14,9 +15,50 @@ uint8_t display_fb[DISPLAY_WIDTH * DISPLAY_HEIGHT * 3];
 #define DISP_PORT   GPIOH
 #define DISP_PIN    GPIO_PIN_7
 
-/* BL_PWM = PB11 (DIO5661 EN pin, active high for full brightness) */
-#define BL_PORT     GPIOB
-#define BL_PIN      GPIO_PIN_11
+/* BL_PWM = PB11 = TIM2_CH4 (AF1), DIO5661 EN pin: PWM on EN dims the backlight.
+ * TIM2 is shared with the LAP_DET input capture (CH1, PA0); that capture only
+ * uses the interrupt, not the counter value, so TIM2's period can be set for PWM.
+ * Check the DIO5661 datasheet for the allowed EN PWM frequency range. */
+#define BL_PORT         GPIOB
+#define BL_PIN          GPIO_PIN_11
+#define BL_PWM_CHANNEL  TIM_CHANNEL_4
+#define BL_PWM_FREQ_HZ  10000U
+
+/* Timer ticks per PWM period (= ARR + 1), computed in Display_BacklightPwmInit() */
+static uint32_t bl_pwm_period;
+
+static void Display_BacklightPwmInit(void)
+{
+    GPIO_InitTypeDef gpio = {0};
+    TIM_OC_InitTypeDef oc = {0};
+
+    /* APB1 prescaler != 1 -> TIM2 kernel clock = 2 x PCLK1 (200 MHz here) */
+    uint32_t tick_hz = (HAL_RCC_GetPCLK1Freq() * 2U) / (htim2.Init.Prescaler + 1U);
+    bl_pwm_period = tick_hz / BL_PWM_FREQ_HZ;
+
+    /* PB11: GPIO output -> TIM2_CH4 */
+    gpio.Pin       = BL_PIN;
+    gpio.Mode      = GPIO_MODE_AF_PP;
+    gpio.Pull      = GPIO_NOPULL;
+    gpio.Speed     = GPIO_SPEED_FREQ_LOW;
+    gpio.Alternate = GPIO_AF1_TIM2;
+    HAL_GPIO_Init(BL_PORT, &gpio);
+
+    /* TIM2 was initialised by CubeMX as free-running 32-bit input capture:
+     * give it a real period, then force an update so the counter restarts
+     * from 0 (otherwise it would first have to count up to 2^32). */
+    __HAL_TIM_SET_AUTORELOAD(&htim2, bl_pwm_period - 1U);
+    HAL_TIM_GenerateEvent(&htim2, TIM_EVENTSOURCE_UPDATE);
+
+    oc.OCMode     = TIM_OCMODE_PWM1;        /* high while CNT < CCR */
+    oc.Pulse      = 0;                      /* start at 0% */
+    oc.OCPolarity = TIM_OCPOLARITY_HIGH;    /* EN active high */
+    oc.OCFastMode = TIM_OCFAST_DISABLE;
+    if (HAL_TIM_PWM_ConfigChannel(&htim2, &oc, BL_PWM_CHANNEL) != HAL_OK)
+        Error_Handler();
+    if (HAL_TIM_PWM_Start(&htim2, BL_PWM_CHANNEL) != HAL_OK)
+        Error_Handler();
+}
 
 void Display_Init(void)
 {
@@ -36,7 +78,8 @@ void Display_Init(void)
     HAL_GPIO_WritePin(DISP_PORT, DISP_PIN, GPIO_PIN_SET);
 
     HAL_Delay(250);
-    HAL_GPIO_WritePin(BL_PORT, BL_PIN, GPIO_PIN_SET);
+    Display_BacklightPwmInit();
+    Display_SetBrightness(100);
 }
 
 void Display_PowerOff(void)
@@ -44,7 +87,7 @@ void Display_PowerOff(void)
     /* Riverdi datasheet power-off sequence:
      *   backlight off -> 5ms -> DISP low -> 80ms (internal voltage discharge)
      */
-    HAL_GPIO_WritePin(BL_PORT, BL_PIN, GPIO_PIN_RESET);
+    Display_SetBrightness(0);
     HAL_Delay(5);
     HAL_GPIO_WritePin(DISP_PORT, DISP_PIN, GPIO_PIN_RESET);
     HAL_Delay(80);
@@ -52,13 +95,13 @@ void Display_PowerOff(void)
 
 void Display_SetBrightness(uint8_t percent)
 {
-    /* GPIO-only implementation: 0=DIO5661 shutdown, >0=full brightness.
-     * For smooth dimming, configure LPTIM2 on PB11 (AF3=LPTIM2_OUT) and
-     * replace this function with a PWM duty-cycle update. */
-    if (percent == 0)
-        HAL_GPIO_WritePin(BL_PORT, BL_PIN, GPIO_PIN_RESET);
-    else
-        HAL_GPIO_WritePin(BL_PORT, BL_PIN, GPIO_PIN_SET);
+    if (percent > 100)
+        percent = 100;
+
+    /* duty = percent %: CCR = 0 keeps EN low (DIO5661 shutdown),
+     * CCR = period (> ARR) keeps EN high (100 %). */
+    uint32_t pulse = (bl_pwm_period * percent) / 100U;
+    __HAL_TIM_SET_COMPARE(&htim2, BL_PWM_CHANNEL, pulse);
 }
 
 void Display_Clear(uint8_t r, uint8_t g, uint8_t b)
