@@ -87,7 +87,7 @@ void Error_Handler(void);
 #define UWB_RST_PIN      GPIO_PIN_2   /* PG2 — reset module UWB (DW3000) */
 #define UWB_RST_PORT     GPIOG
 
-#define RPM_PIN          GPIO_PIN_15  /* PH15 — entrée capteur RPM (EXTI) */
+#define RPM_PIN          GPIO_PIN_11  /* PH11 — entrée capteur RPM (TIM5_CH2, voir tim.c) */
 #define RPM_PORT         GPIOH
 
 #define CS_FLASH_GPIO_PIN  GPIO_PIN_0   /* PI0 — SPI2_CS, flash externe IC1 */

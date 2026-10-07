@@ -16,8 +16,7 @@ uint8_t display_fb[DISPLAY_WIDTH * DISPLAY_HEIGHT * 3];
 #define DISP_PIN    GPIO_PIN_7
 
 /* BL_PWM = PB11 = TIM2_CH4 (AF1), DIO5661 EN pin: PWM on EN dims the backlight.
- * TIM2 is shared with the LAP_DET input capture (CH1, PA0); that capture only
- * uses the interrupt, not the counter value, so TIM2's period can be set for PWM.
+ * TIM2 is dedicated to this PWM (lap/RPM timing uses TIM5, see app_timing.c).
  * Check the DIO5661 datasheet for the allowed EN PWM frequency range. */
 #define BL_PORT         GPIOB
 #define BL_PIN          GPIO_PIN_11
@@ -44,9 +43,8 @@ static void Display_BacklightPwmInit(void)
     gpio.Alternate = GPIO_AF1_TIM2;
     HAL_GPIO_Init(BL_PORT, &gpio);
 
-    /* TIM2 was initialised by CubeMX as free-running 32-bit input capture:
-     * give it a real period, then force an update so the counter restarts
-     * from 0 (otherwise it would first have to count up to 2^32). */
+    /* TIM2 is initialised as a PWM time base in MX_TIM2_Init(): set the exact period,
+     * then force an update so the counter restarts from 0. */
     __HAL_TIM_SET_AUTORELOAD(&htim2, bl_pwm_period - 1U);
     HAL_TIM_GenerateEvent(&htim2, TIM_EVENTSOURCE_UPDATE);
 

@@ -1,6 +1,6 @@
 Pinlist
 
-Exported from Carte-mere-dashboard v16.sch at 21/09/2026 19:18
+Exported from Carte-mere-dashboard v19.sch at 07/10/2026 19:01
 
 EAGLE Version 9.7.0 Copyright (c) 1988-2026 Autodesk, Inc.
 
@@ -15,10 +15,10 @@ C1       1        1          pas      GND
 C2       1        1          pas      VBAT_FUSED
          2        2          pas      GND
 
-C3       1        1          pas      +VCC
+C3       1        1          pas      +V
          2        2          pas      GND
 
-C4       1        1          pas      +VCC
+C4       1        1          pas      +V
          2        2          pas      GND
 
 C5       1        1          pas      GND
@@ -288,6 +288,9 @@ C92      1        1          pas      +VBAT
 C93      1        1          pas      LX
          2        2          pas      BST
 
+C94      1        1          pas      +V
+         2        2          pas      SUPPLY_PMOS_GATE
+
 D1       1        VDD        pwr      +5V
          2        DOUT       out      N$2
          3        VSS        pwr      GND
@@ -494,7 +497,7 @@ L4       1        1          pas      LX
 
 Q1       1        G          pas      SUPPLY_PMOS_GATE
          2        S          pas      VBAT_FUSED
-         3        D          pas      +VCC
+         3        D          pas      +V
 
 Q3       1        B          pas      N$3
          2        E          pas      GND
@@ -996,7 +999,7 @@ U8       1        PE2        io                *** unconnected ***
          127      VDD_10     pwr      +3.3V
          128      PH13       io       FDCAN1_TX
          129      PH14       io       FDCAN1_RX
-         130      PH15       io       RPM
+         130      PH11       io       RPM
          131      PI0        io       SPI2_CS
          132      PI1        io       SPI2_SCK
          133      PI2        io       SPI2_MISO

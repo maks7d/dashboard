@@ -4,6 +4,11 @@
 
 extern TIM_HandleTypeDef htim16;
 
+/* IMPORTANT : sur STM32H7, DMA1/DMA2 n'ont PAS accès à la DTCM (0x20000000), où le linker
+   place .bss/.data par défaut. Un buffer lu par le DMA doit être en AXI SRAM (0x24000000),
+   d'où la section .dma_buffers (voir STM32H743XX_FLASH.ld, comme le framebuffer de display.c).
+   Cette section n'est pas initialisée au démarrage : WS2812B_Init() fait le memset. */
+__attribute__((section(".dma_buffers"), aligned(32)))
 static uint16_t  dma_buf[WS2812B_BUF_SIZE];
 static uint8_t   colors[WS2812B_NUM_LEDS][3]; // [i] = {R, G, B}
 static volatile uint8_t busy = 0;

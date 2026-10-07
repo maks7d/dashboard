@@ -15,26 +15,33 @@
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY  ( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
 
 /* === Memory Management === */
-#define configTOTAL_HEAP_SIZE               ( ( size_t ) ( 32 * 1024 ) )
-#define configAPPLICATION_ALLOCATED_HEAP    ( 1 )
+/* Taille du tableau utilisé comme heap (voir app.c : heap_5 => vPortDefineHeapRegions) */
+#define configTOTAL_HEAP_SIZE               ( ( size_t ) ( 48 * 1024 ) )
 #define configSUPPORT_STATIC_ALLOCATION      ( 0 )  // Désactivé pour simplifier
 #define configSUPPORT_DYNAMIC_ALLOCATION     ( 1 )
 
 /* === Scheduler Configuration === */
 #define configUSE_PREEMPTION                ( 1 )
 #define configUSE_TIME_SLICING              ( 1 )
-#define configUSE_IDLE_HOOK                 ( 0 )
+#define configUSE_IDLE_HOOK                 ( 1 )  // vApplicationIdleHook() dans app.c (mise en veille WFI)
 #define configUSE_TICK_HOOK                 ( 0 )
+#define configUSE_MALLOC_FAILED_HOOK        ( 1 )  // vApplicationMallocFailedHook() dans app.c
 #define configGENERATE_RUN_TIME_STATS        ( 0 )
 #define configUSE_TRACE_FACILITY            ( 0 )  // Désactivé pour simplifier
 #define configIDLE_SHOULD_YIELD              ( 1 )
 #define configUSE_MUTEXES                   ( 1 )
-#define configCHECK_FOR_STACK_OVERFLOW      ( 0 )  // Désactivé pour simplifier
+#define configCHECK_FOR_STACK_OVERFLOW      ( 2 )  // vApplicationStackOverflowHook() dans app.c
 #define configUSE_EVENT_GROUPS                 ( 1 )
+
+/* configASSERT : si une condition FreeRTOS est violée (ex: API ...FromISR appelée depuis une
+   interruption trop prioritaire), on fige le CPU ici pour que le debugger s'arrête sur la bonne ligne. */
+#define configASSERT( x )   if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
 
 /* === FreeRTOS API Includes === */
 #define INCLUDE_vTaskDelay                   ( 1 )
 #define INCLUDE_vTaskDelayUntil               ( 1 )
+#define INCLUDE_vTaskDelete                  ( 1 )  // une tâche d'init peut se supprimer elle-même
+#define INCLUDE_uxTaskGetStackHighWaterMark  ( 1 )  // mesurer la marge de pile restante d'une tâche
 #define INCLUDE_xTaskGetSchedulerState      ( 1 )
 #define INCLUDE_xQueueGetMutexHolder         ( 1 )
 
@@ -59,6 +66,9 @@
 
 /* Tick configuration - REQUIRED */
 #define configUSE_16_BIT_TICKS               ( 0 )
+
+#define vPortSVCHandler SVC_Handler
+#define xPortPendSVHandler PendSV_Handler
 
 /* === Includes === */
 /* Note: stm32h7xx_hal.h is NOT included here to avoid dependency issues.

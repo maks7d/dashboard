@@ -86,6 +86,21 @@ set(LITTLEFS_SOURCES
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${LITTLEFS_SOURCES})
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LITTLEFS_DIR})
 
+# === Application (modules FreeRTOS, voir Core/Inc/app.h) ===
+# Déclarés ici et non dans cmake/stm32cubemx/ : ce dossier est régénéré par CubeMX.
+set(APP_SOURCES
+    ${CMAKE_SOURCE_DIR}/Core/Src/app.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_power.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_buttons.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_can.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_light.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_timing.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_display.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_led.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_irq.c
+)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${APP_SOURCES})
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb")
 
 # Force Thumb mode for all sources (critical for Cortex-M)

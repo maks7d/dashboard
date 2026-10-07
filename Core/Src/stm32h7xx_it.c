@@ -64,6 +64,7 @@ extern TIM_HandleTypeDef htim2;
 extern FDCAN_HandleTypeDef hfdcan1;
 /* USER CODE BEGIN EV */
 extern DMA_HandleTypeDef hdma_tim16_ch1;
+extern DMA_HandleTypeDef hdma_spi1_rx;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -144,18 +145,11 @@ void UsageFault_Handler(void)
   }
 }
 
-/**
-  * @brief This function handles System service call via SWI instruction.
-  */
-void SVC_Handler(void)
-{
-  /* USER CODE BEGIN SVCall_IRQn 0 */
-
-  /* USER CODE END SVCall_IRQn 0 */
-  /* USER CODE BEGIN SVCall_IRQn 1 */
-
-  /* USER CODE END SVCall_IRQn 1 */
-}
+/* SVC_Handler et PendSV_Handler sont fournis par FreeRTOS (port.c) :
+   FreeRTOSConfig.h les renomme via
+     #define vPortSVCHandler    SVC_Handler
+     #define xPortPendSVHandler PendSV_Handler
+   Ne PAS les redéfinir ici (erreur d'édition de liens : symbole défini deux fois). */
 
 /**
   * @brief This function handles Debug monitor.
@@ -168,19 +162,6 @@ void DebugMon_Handler(void)
   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
 
   /* USER CODE END DebugMonitor_IRQn 1 */
-}
-
-/**
-  * @brief This function handles Pendable request for system service.
-  */
-void PendSV_Handler(void)
-{
-  /* USER CODE BEGIN PendSV_IRQn 0 */
-
-  /* USER CODE END PendSV_IRQn 0 */
-  /* USER CODE BEGIN PendSV_IRQn 1 */
-
-  /* USER CODE END PendSV_IRQn 1 */
 }
 
 /**
@@ -227,16 +208,34 @@ void FDCAN1_IT0_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-void EXTI9_5_IRQHandler(void)
+/* Chaque ligne EXTI activée dans MX_GPIO_EXTI_Init() DOIT avoir son handler ici,
+   sinon la première interruption saute dans Default_Handler (boucle infinie).
+   Tous passent par HAL_GPIO_EXTI_IRQHandler() -> HAL_GPIO_EXTI_Callback() (app_irq.c). */
+void EXTI0_IRQHandler(void)       /* PE0 : IMU_INT1 */
 {
-  HAL_GPIO_EXTI_IRQHandler(POWER_BTN_PIN);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+}
+
+void EXTI4_IRQHandler(void)       /* PI4 : INT_LIGHT_SENSOR */
+{
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
+}
+
+void EXTI9_5_IRQHandler(void)     /* PG5/PG6/PG7/PG8 : boutons */
+{
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5);
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_6);
+  HAL_GPIO_EXTI_IRQHandler(POWER_BTN_PIN);
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
 }
 
 void DMA1_Stream0_IRQHandler(void)
 {
   HAL_DMA_IRQHandler(&hdma_tim16_ch1);
+}
+
+void DMA2_Stream0_IRQHandler(void)  /* SPI1 RX (IMU BMI270) */
+{
+  HAL_DMA_IRQHandler(&hdma_spi1_rx);
 }
 /* USER CODE END 1 */

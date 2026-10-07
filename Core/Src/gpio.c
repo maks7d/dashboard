@@ -185,19 +185,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
 
-  /* Configure GPIO pin : PA0 (LAP_DET, capteur détection tour)
-     NB : pas de mode interruption ici, la ligne EXTI0 est déjà utilisée par PE0 (IMU_INT1).
-     Lecture en polling, ou réaffecter une des deux IT sur une autre broche si besoin. */
-  GPIO_InitStruct.Pin = LAP_DET_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(LAP_DET_PORT, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PH15 (RPM, entrée capteur régime moteur) */
-  GPIO_InitStruct.Pin = RPM_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(RPM_PORT, &GPIO_InitStruct);
+  /* PA0 (LAP_DET) et PH11 (RPM) ne sont PAS configurées ici : ce sont des entrées de capture
+     TIM5 CH1/CH2 (AF2), configurées dans HAL_TIM_IC_MspInit() (tim.c). */
 }
 
 /* USER CODE BEGIN 2 */
@@ -211,8 +200,5 @@ void MX_GPIO_EXTI_Init(void)
 
   HAL_NVIC_SetPriority(EXTI4_IRQn, 7,0); // PI4 light sensor interrupt
   HAL_NVIC_EnableIRQ(EXTI4_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 8,0); // PH15 RPM interrupt
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 /* USER CODE END 2 */
