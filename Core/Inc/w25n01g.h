@@ -14,6 +14,7 @@ extern "C" {
 #endif
 
 extern struct lfs_config cfg_lfs;
+#define LFS_CACHE_SIZE_BYTES  2048   /* cache littlefs = taille d'une page NAND (voir w25n01g.c) */
 
 // define CS pin
 #define W25N01_CS_Pin          CS_FLASH_GPIO_PIN

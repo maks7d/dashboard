@@ -98,8 +98,21 @@ set(APP_SOURCES
     ${CMAKE_SOURCE_DIR}/Core/Src/app_display.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_led.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_irq.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_log.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/log_storage_sd.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/log_storage_flash.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/sd_diskio.c
 )
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${APP_SOURCES})
+
+# === FatFS (carte microSD) : R0.14b, config dans lib/fatfs/src/ffconf.h ===
+set(FATFS_DIR ${CMAKE_SOURCE_DIR}/lib/fatfs/src)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    ${FATFS_DIR}/ff.c
+    ${FATFS_DIR}/ffunicode.c
+    ${FATFS_DIR}/ffsystem.c
+)
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${FATFS_DIR})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb")
 

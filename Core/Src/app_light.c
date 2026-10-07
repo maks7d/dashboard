@@ -122,6 +122,7 @@ void vTaskLightSensor(void *pvParameters)
       if (VEML6030_GetValues(&veml6030, &als_value) == VEML6030_OK) {
         uint16_t lux = (uint16_t)als_value;
         xQueueOverwrite(xLightSensorQueue, &lux);
+        Log_Lux(lux);
       }
       xSemaphoreGive(xI2C1Mutex);
     }

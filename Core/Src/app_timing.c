@@ -53,6 +53,7 @@ static uint32_t s_lastCnt32;
 
 /* Tour */
 static uint8_t  s_haveLap;
+static uint16_t s_lapNumber;
 static uint64_t s_lastLapTs;
 
 /* RPM : écrits par vTaskTiming, lus par n'importe quelle tâche (accès 32 bits atomiques) */
@@ -112,7 +113,10 @@ static void Lap_OnPulse(uint64_t ts)
     if (us <= UINT32_MAX) {
       uint32_t lapUs = (uint32_t)us;
       xQueueSend(xLapTimeQueue, &lapUs, 0);   /* timeout 0 : jamais bloquant (queue pleine = perdu) */
+      Log_Lap(lapUs, ++s_lapNumber);
     }
+  } else {
+    Log_Lap(0, 0);                            /* passage de départ : début du chronométrage */
   }
   s_lastLapTs = ts;
   s_haveLap   = 1;
@@ -153,6 +157,13 @@ static void Timing_Poll(void)
     uint32_t ts32 = s_rpmBuf[s_rpm.rd];
     s_rpm.rd = (s_rpm.rd + 1u) & (CAP_BUF_LEN - 1u);
     Rpm_OnPulse(s_now64 - (uint32_t)(cnt - ts32));
+  }
+
+  /* Log du régime à 10 Hz (et non à chaque impulsion : 100 Hz+ à haut régime) */
+  static uint8_t decim = 0;
+  if (++decim >= (100u / TIMING_POLL_MS)) {
+    decim = 0;
+    Log_Rpm(Rpm_GetPulsesPerMinute());
   }
 }
 

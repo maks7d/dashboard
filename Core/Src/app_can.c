@@ -47,6 +47,7 @@ void vTaskCAN(void *pvParameters)
 
   for (;;) {
     if (xQueueReceive(xCanRxQueue, &frame, portMAX_DELAY) == pdPASS) {
+      Log_CanRx(frame.Identifier, frame.DataLength, frame.Data);   /* flux brut */
       /* TODO : décoder la trame (frame.Identifier, frame.Data, frame.DataLength) */
     }
   }

@@ -16,7 +16,7 @@
 
 /* === Memory Management === */
 /* Taille du tableau utilisé comme heap (voir app.c : heap_5 => vPortDefineHeapRegions) */
-#define configTOTAL_HEAP_SIZE               ( ( size_t ) ( 48 * 1024 ) )
+#define configTOTAL_HEAP_SIZE               ( ( size_t ) ( 64 * 1024 ) )
 #define configSUPPORT_STATIC_ALLOCATION      ( 0 )  // Désactivé pour simplifier
 #define configSUPPORT_DYNAMIC_ALLOCATION     ( 1 )
 

@@ -67,6 +67,7 @@ void App_Start(void)
   xSystemEvents = xEventGroupCreate();
   if (xSystemEvents == NULL) { Error_Handler(); }
 
+  Log_CreateObjects();      /* en premier : les autres modules peuvent loguer dès leur init */
   Power_CreateObjects();
   Buttons_CreateObjects();
   Can_CreateObjects();
@@ -81,6 +82,7 @@ void App_Start(void)
   APP_CREATE_TASK(vTaskLightSensor, "LightSensor", 1024, PRIO_LIGHT);
   APP_CREATE_TASK(vTaskDisplay,     "Display",     2048, PRIO_DISPLAY);
   APP_CREATE_TASK(vTaskLED,         "LED",          512, PRIO_LED);
+  APP_CREATE_TASK(vTaskLog,         "Log",         2048, PRIO_LOG);
 
   /* 4) Le scheduler prend la main : cette fonction ne revient normalement jamais.
         Si on arrive à la ligne suivante, il n'y avait pas assez de RAM pour la tâche idle. */

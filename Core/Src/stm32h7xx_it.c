@@ -229,6 +229,12 @@ void EXTI9_5_IRQHandler(void)     /* PG5/PG6/PG7/PG8 : boutons */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
 }
 
+void SDMMC1_IRQHandler(void)      /* fin de transfert DMA de la carte SD */
+{
+  extern SD_HandleTypeDef hsd1;
+  HAL_SD_IRQHandler(&hsd1);
+}
+
 void DMA1_Stream0_IRQHandler(void)
 {
   HAL_DMA_IRQHandler(&hdma_tim16_ch1);

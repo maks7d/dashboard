@@ -43,11 +43,12 @@ void MX_SDMMC1_SD_Init(void)
   hsd1.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
   hsd1.Init.BusWide = SDMMC_BUS_WIDE_4B;
   hsd1.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd1.Init.ClockDiv = 0;
-  if (HAL_SD_Init(&hsd1) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  /* SDMMC_CK = kernel clock (200 MHz, PLL1Q) / (2 x ClockDiv) = 25 MHz en mode "default speed".
+     ClockDiv = 0 donnerait 200 MHz, bien au-dessus de la limite des cartes SD. */
+  hsd1.Init.ClockDiv = 4;
+  /* HAL_SD_Init() n'est volontairement PAS appelé ici : sans carte il échouerait et bloquerait
+     le démarrage dans Error_Handler(). L'initialisation de la carte se fait à l'exécution,
+     quand la carte est détectée (voir sd_diskio.c : SDCard_Open). */
   /* USER CODE BEGIN SDMMC1_Init 2 */
 
   /* USER CODE END SDMMC1_Init 2 */
@@ -103,6 +104,9 @@ void HAL_SD_MspInit(SD_HandleTypeDef* sdHandle)
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /* USER CODE BEGIN SDMMC1_MspInit 1 */
+    /* Interruption SDMMC1 : fin de transfert DMA. Priorité 5 car le callback utilise l'API FreeRTOS "FromISR" */
+    HAL_NVIC_SetPriority(SDMMC1_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(SDMMC1_IRQn);
 
   /* USER CODE END SDMMC1_MspInit 1 */
   }

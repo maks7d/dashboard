@@ -90,6 +90,12 @@ void Error_Handler(void);
 #define RPM_PIN          GPIO_PIN_11  /* PH11 — entrée capteur RPM (TIM5_CH2, voir tim.c) */
 #define RPM_PORT         GPIOH
 
+#define CD_SD_PIN        GPIO_PIN_8   /* PB8 — détection de carte microSD (R15 = pull-up 3,3 V) */
+#define CD_SD_PORT       GPIOB
+#define CD_SD_ACTIVE_LEVEL GPIO_PIN_RESET  /* niveau lu quand une carte EST insérée.
+                                              A VERIFIER sur la carte (le switch du connecteur MSD-4-A
+                                              tire normalement la ligne vers GND quand la carte est en place) */
+
 #define CS_FLASH_GPIO_PIN  GPIO_PIN_0   /* PI0 — SPI2_CS, flash externe IC1 */
 #define CS_FLASH_GPIO_PORT GPIOI
 /* USER CODE END Private defines */

@@ -13,12 +13,40 @@
 
 
 #include "w25n01g.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+/* Attente qui REND le CPU quand le scheduler tourne (sinon boucle active classique).
+   Les attentes de la flash (programmation ~0,5 ms, effacement jusqu'à ~10 ms) ne doivent pas
+   faire tourner le CPU à vide : on dort 1 tick, les autres tâches (ou Idle/WFI) prennent la main. */
+static void W25n01g_yield(void)
+{
+  if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING) {
+    vTaskDelay(1);
+  }
+}
+
+static void W25n01g_delay_ms(uint32_t ms)
+{
+  if (xTaskGetSchedulerState() == taskSCHEDULER_RUNNING) {
+    vTaskDelay(pdMS_TO_TICKS(ms));
+  } else {
+    HAL_Delay(ms);
+  }
+}
 
 
-#define LFS_BUFFER_SIZE     512
-static uint8_t read_buffer[LFS_BUFFER_SIZE];
-static uint8_t prog_buffer[LFS_BUFFER_SIZE];
-static uint8_t lookahead_buffer[LFS_BUFFER_SIZE];
+/* Tailles littlefs. prog_size = taille d'une page NAND (2048) : chaque écriture = UNE programmation
+   de page (au lieu de 4 avec 512 octets), donc moins de temps et moins d'usure. read_size reste
+   à 512. cache_size doit être un multiple de read_size et prog_size, et diviser block_size.
+   Changer ces valeurs impose de reformater (lfs_format) la flash. */
+#define LFS_READ_SIZE       512
+#define LFS_PROG_SIZE       2048
+#define LFS_CACHE_SIZE      LFS_CACHE_SIZE_BYTES
+#define LFS_LOOKAHEAD_SIZE  128   /* octets (multiple de 8) : 1024 blocs => 128 octets suffisent */
+static uint8_t read_buffer[LFS_CACHE_SIZE];
+static uint8_t prog_buffer[LFS_CACHE_SIZE];
+static uint8_t lookahead_buffer[LFS_LOOKAHEAD_SIZE] __attribute__((aligned(4)));
 
 /**
  * @struct cfg_lfs
@@ -31,12 +59,12 @@ struct lfs_config cfg_lfs = {
         .erase = lfs_erase,
         .sync = lfs_sync,
 
-        .read_size = LFS_BUFFER_SIZE,
-        .prog_size = LFS_BUFFER_SIZE,
+        .read_size = LFS_READ_SIZE,
+        .prog_size = LFS_PROG_SIZE,
         .block_size = W25N01G_PAGE_SIZE * W25N01G_PAGES_PER_BLOCK,
         .block_count = W25N01G_BLOCKS_PER_DIE,
-        .cache_size = LFS_BUFFER_SIZE,
-        .lookahead_size = LFS_BUFFER_SIZE,
+        .cache_size = LFS_CACHE_SIZE,
+        .lookahead_size = LFS_LOOKAHEAD_SIZE,
         .block_cycles = 500,
 
         .read_buffer = read_buffer,
@@ -79,7 +107,7 @@ bool w25n_init()
     success = false;
   }
 
-  HAL_Delay(100);
+  W25n01g_delay_ms(100);
   return success;
 }
 
@@ -97,7 +125,7 @@ int8_t w25n01g_deviceReset(void)
   W25n01g_select();
   HAL_SPI_Transmit(&HANDLER_FLASH, &cmd, 1, W25NXX_DEFAULT_TIMEOUT);
   W25n01g_deselect();
-  HAL_Delay(500);
+  W25n01g_delay_ms(500);
 
   W25n01g_write_sr(W25N01G_PROT_REG, 0x00);
   W25n01g_write_sr(W25N01G_CONF_REG, W25N01G_CONFIG_ECC_ENABLE|W25N01G_CONFIG_BUFFER_READ_MODE);
@@ -156,8 +184,10 @@ uint8_t W25n01g_wait_for_ready(void)
 {
   uint8_t quad_bk1_sr;
   W25n01g_read_sr(W25N01G_STAT_REG, &quad_bk1_sr);
-  return (quad_bk1_sr & 0x01);
-
+  if (quad_bk1_sr & 0x01) {
+    W25n01g_yield();   /* occupée : on laisse la main au lieu de relire en boucle */
+    return 1;
+  }
   return 0;
 }
 
@@ -216,12 +246,13 @@ bool w25n01g_block_erase(uint32_t address)
     uint8_t quad_bk1_sr;
     W25n01g_read_sr(W25N01G_STAT_REG, &quad_bk1_sr);
     while (quad_bk1_sr & 0x01) {
+      W25n01g_yield();
       W25n01g_read_sr(W25N01G_STAT_REG, &quad_bk1_sr);
       if (HAL_GetTick() - tick_start > W25NXX_TIMOUT || (quad_bk1_sr & 0x04)) {
         return false;
       }
     }
-    HAL_Delay(1);
+    W25n01g_delay_ms(1);
     return true;
   }
 
@@ -434,20 +465,26 @@ int lfs_sync(const struct lfs_config *c)
 
 int lfs_erase(const struct lfs_config *c, lfs_block_t block)
 {
-  w25n01g_block_erase(block * c->block_size);
-  return 0;
+  /* Les erreurs DOIVENT être remontées : sinon littlefs croit que tout va bien et les logs
+     sont perdus sans qu'on le sache. */
+  return w25n01g_block_erase(block * c->block_size) ? LFS_ERR_OK : LFS_ERR_IO;
 }
 
 int lfs_prog(const struct lfs_config *c, lfs_block_t block, lfs_off_t offset, const void *buffer, lfs_size_t size)
 {
-  w25n01g_write_flash((block * c->block_size + offset), (uint8_t *) buffer, size);
-  return 0;
+  return w25n01g_write_flash((block * c->block_size + offset), (uint8_t *) buffer, size) ? LFS_ERR_OK : LFS_ERR_IO;
 }
 
 int lfs_read(const struct lfs_config *c, lfs_block_t block, lfs_off_t offset, void *buffer, lfs_size_t size)
 {
-  w25n01g_read_bytes((block * c->block_size + offset), (uint8_t *) buffer, size);
-  return 0;
+  /* w25n01g_read_bytes() ne lit qu'au sein d'une page : on boucle si la demande en traverse une
+     (cache_size 2048 > page restante possible) */
+  uint32_t address = block * c->block_size + offset;
+  uint8_t *dst = (uint8_t *) buffer;
+  while (size > 0) {
+    uint32_t n = w25n01g_read_bytes(address, dst, size);
+    if (n == 0) { return LFS_ERR_IO; }
+    address += n; dst += n; size -= n;
+  }
+  return LFS_ERR_OK;
 }
-
-

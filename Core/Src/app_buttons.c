@@ -40,6 +40,7 @@ void Buttons_Irq(uint16_t GPIO_Pin, BaseType_t *pxHigherPriorityTaskWoken)
   lastTick = now;
 
   xQueueSendFromISR(xButtonQueue, &GPIO_Pin, pxHigherPriorityTaskWoken);
+  Log_ButtonFromISR((GPIO_Pin == GPIO_PIN_8) ? 1u : (GPIO_Pin == GPIO_PIN_6) ? 3u : 4u);   /* SW1 / SW3 / SW4 */
 }
 
 const char *Buttons_Name(uint16_t GPIO_Pin)

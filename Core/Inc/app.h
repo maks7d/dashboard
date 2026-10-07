@@ -33,6 +33,7 @@ extern "C" {
 #include "queue.h"
 #include "semphr.h"
 #include "event_groups.h"
+#include "app_log.h"
 
 /* ===== Priorités des tâches (0 = idle, configMAX_PRIORITIES-1 = 4 = la plus haute) =====
  * Règle : plus une tâche doit réagir vite et travaille peu, plus sa priorité est haute.
@@ -44,6 +45,7 @@ extern "C" {
 #define PRIO_LIGHT     2
 #define PRIO_DISPLAY   2
 #define PRIO_LED       1   /* cosmétique                                     */
+#define PRIO_LOG       1   /* écriture des logs : tâche de fond               */
 
 /* ===== Groupe d'événements système ===== */
 #define EVT_INIT_DONE  (1u << 0)   /* posé par la tâche d'init quand le matériel est prêt */

@@ -56,12 +56,17 @@ void Power_ButtonIrq(BaseType_t *pxHigherPriorityTaskWoken)
 
 static void Power_OnShortPress(void)
 {
+  Log_Power(1);
   /* TODO : action d'appui court (ex: changer de page, régler la luminosité...) */
 }
 
 static void Power_Off(void)
 {
-  /* TODO : avant de couper, sauvegarder les logs / éteindre l'écran proprement */
+  /* Écrit tout ce qui est en attente et ferme proprement les fichiers (carte SD : sinon le
+     système de fichiers reste "sale"), puis coupe l'alimentation. Attente max 1,5 s. */
+  Log_Power(2);
+  Log_FlushAndClose(1500);
+  /* TODO : éteindre l'écran proprement */
   HAL_GPIO_WritePin(POWER_HOLD_PORT, POWER_HOLD_PIN, GPIO_PIN_RESET);
 }
 
