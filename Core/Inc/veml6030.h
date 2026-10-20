@@ -136,9 +136,9 @@ typedef struct
 #define VEML6030_INT_TH_LOW 1U
 #define VEML6030_INT_TH_HIGH 2U
 
- /* VEML6030 I2C ADDRESS */
-#define VEML6030_I2C_READ_ADD 0x21
-#define VEML6030_I2C_WRITE_ADD 0x20
+ /* VEML6030 I2C ADDRESS (8 bits, HAL) : ADDR a 3,3 V => 7 bits 0x48 ; ADDR a GND => 0x10 (0x20/0x21) */
+#define VEML6030_I2C_READ_ADD 0x91
+#define VEML6030_I2C_WRITE_ADD 0x90
 
 /* VEML6030 Refresh Time (Intermesurment Time) definitions */
 /* VEML6030’s refresh time can be determined by Power Saving Mode (PSM) and the Integration Time (ALS_IT) */

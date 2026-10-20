@@ -48,8 +48,6 @@ void PeriphCommonClock_Config(void);
   */
 int main(void)
 {
-  //*(volatile uint32_t *)0xE000E008 |= (1UL << 1); /* ACTLR.DISDEFWBUF: precise bus faults (debug) */
-
   /* USER CODE BEGIN 1 */
   /* L'AXI SRAM (.dma_buffers) est protégée par ECC 64 bits et n'est pas initialisée au reset.
      Une première écriture de 32 bits (memset du framebuffer) y déclenche une erreur ECC, donc
