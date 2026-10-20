@@ -48,8 +48,20 @@ void PeriphCommonClock_Config(void);
   */
 int main(void)
 {
+  //*(volatile uint32_t *)0xE000E008 |= (1UL << 1); /* ACTLR.DISDEFWBUF: precise bus faults (debug) */
 
   /* USER CODE BEGIN 1 */
+  /* L'AXI SRAM (.dma_buffers) est protégée par ECC 64 bits et n'est pas initialisée au reset.
+     Une première écriture de 32 bits (memset du framebuffer) y déclenche une erreur ECC, donc
+     un bus fault imprécis. On l'initialise ici avec des écritures 64 bits (strd). */
+  {
+    extern uint32_t _sdma_buffers, _edma_buffers;
+    register uint32_t lo = 0, hi = 0;
+    for (uint32_t *p = &_sdma_buffers; p < &_edma_buffers; p += 2) {
+      __asm volatile ("strd %1, %2, [%0]" : : "r"(p), "r"(lo), "r"(hi) : "memory");
+    }
+    __DSB();
+  }
   /* TOUT PREMIER geste : mettre PE3 (POWER_HOLD) à 1 pour garder la carte alimentée
      après le relâchement du bouton power. Plus c'est tôt, mieux c'est. */
   __HAL_RCC_GPIOE_CLK_ENABLE();

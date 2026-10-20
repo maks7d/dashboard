@@ -5,7 +5,7 @@
       "name": "Debug (ST-Link)",
       "type": "cortex-debug",
       "request": "launch",
-      "servertype": "stlink",
+      "servertype": "stutil",
       "cwd": "${workspaceFolder}",
       "executable": "${workspaceFolder}/build/Debug/Dash.elf",
       "device": "STM32H743XX",

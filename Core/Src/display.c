@@ -133,8 +133,11 @@ void Display_DrawPixel(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b)
 
 void Display_Flush(void)
 {
-    /* Clean D-cache for the entire framebuffer so LTDC sees CPU writes */
-    SCB_CleanDCache_by_Addr((uint32_t *)display_fb, sizeof(display_fb));
+    /* Clean D-cache for the entire framebuffer so LTDC sees CPU writes.
+     * Skipped while the D-cache is disabled: nothing to clean, the CPU writes
+     * go straight to the AXI SRAM. */
+    if (SCB->CCR & SCB_CCR_DC_Msk)
+        SCB_CleanDCache_by_Addr((uint32_t *)display_fb, sizeof(display_fb));
 }
 
 void Display_ShowText(uint16_t x, uint16_t y, char *text, uint16_t color, uint16_t bgcolor)

@@ -12,6 +12,7 @@
       "label": "CMake: Build",
       "type": "shell",
       "command": "cmake --build --preset Debug",
+      "dependsOn": "CMake: Configure",
       "group": {
         "kind": "build",
         "isDefault": true
@@ -33,6 +34,7 @@
       "label": "CMake: Rebuild",
       "type": "shell",
       "command": "cmake --build --preset Debug --clean-first",
+      "dependsOn": "CMake: Configure",
       "group": "build",
       "problemMatcher": ["$gcc"]
     }

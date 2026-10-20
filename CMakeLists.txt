@@ -140,6 +140,10 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
 )
 
+# SystemInit must set VTOR = FLASH_BANK1_BASE (the default VTOR=0 is ITCM on H7);
+# system_stm32h7xx.c is built in STM32_Drivers, not in the main target.
+target_compile_definitions(STM32_Drivers PRIVATE USER_VECT_TAB_ADDRESS)
+
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols

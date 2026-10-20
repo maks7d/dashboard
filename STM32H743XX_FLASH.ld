@@ -248,9 +248,11 @@ SECTIONS
   .dma_buffers (NOLOAD) :
   {
     . = ALIGN(32);
+    _sdma_buffers = .;   /* bornes pour l'init ECC 64 bits dans main() */
     *(.dma_buffers)
     *(.dma_buffers*)
     . = ALIGN(32);
+    _edma_buffers = .;
   } >RAM
 
   /* Variables en D2 SRAM — accessible par les périphériques D2 (USART, SPI, I2C DMA) */
