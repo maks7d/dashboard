@@ -240,6 +240,12 @@ void DMA1_Stream0_IRQHandler(void)
   HAL_DMA_IRQHandler(&hdma_tim16_ch1);
 }
 
+void USART1_IRQHandler(void)         /* GNSS NEO-M9N : IDLE (fin de trame). Le DMA RX n'a pas d'interruption. */
+{
+  extern void GNSS_UartIrq(void);
+  GNSS_UartIrq();
+}
+
 void DMA2_Stream0_IRQHandler(void)  /* SPI1 RX (IMU BMI270) */
 {
   HAL_DMA_IRQHandler(&hdma_spi1_rx);

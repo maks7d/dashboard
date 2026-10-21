@@ -12,7 +12,24 @@
       "interface": "swd",
       "runToEntryPoint": "main",
       "gdbPath": "arm-none-eabi-gdb",
-      "preLaunchTask": "CMake: Build"
+      "preLaunchTask": "CMake: Build",
+    },
+    {
+      "name": "Debug (OpenOCD + Live Watch)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug/Dash.elf",
+      "device": "STM32H743XX",
+      "configFiles": ["interface/stlink.cfg", "target/stm32h7x.cfg"],
+      "runToEntryPoint": "main",
+      "gdbPath": "arm-none-eabi-gdb",
+      "preLaunchTask": "CMake: Build",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      }
     }
   ]
 }

@@ -34,6 +34,7 @@ extern "C" {
 #include "semphr.h"
 #include "event_groups.h"
 #include "app_log.h"
+#include "gnss.h"
 
 /* ===== Priorités des tâches (0 = idle, configMAX_PRIORITIES-1 = 4 = la plus haute) =====
  * Règle : plus une tâche doit réagir vite et travaille peu, plus sa priorité est haute.
@@ -42,6 +43,7 @@ extern "C" {
 #define PRIO_POWER     3   /* bouton power : doit réagir tout de suite       */
 #define PRIO_CAN       3   /* réception CAN : ne pas perdre de trames        */
 #define PRIO_TIMING    3   /* lit les horodatages TIM5 (court, toutes les 10 ms) */
+#define PRIO_GNSS      3   /* décode un NAV-PVT (~10 µs) 25 fois par seconde : latence minimale */
 #define PRIO_LIGHT     2
 #define PRIO_DISPLAY   2
 #define PRIO_LED       1   /* cosmétique                                     */
@@ -56,6 +58,7 @@ extern QueueHandle_t xLapTimeQueue;      /* uint32_t : durée d'un tour en µs  
 extern QueueHandle_t xLightSensorQueue;  /* uint16_t : dernière valeur de lux     (light -> display) */
 extern QueueHandle_t xButtonQueue;       /* uint16_t : GPIO_PIN_x du bouton pressé (ISR -> display)  */
 extern QueueHandle_t xCanRxQueue;        /* CAN_Frame_t : trames reçues           (ISR -> tâche CAN) */
+extern QueueHandle_t xGnssFixQueue;      /* Gnss_Fix_t : dernière solution GNSS, taille 1 (gnss -> tous) */
 
 typedef struct {
   uint32_t Identifier;
@@ -92,6 +95,12 @@ void Timing_CreateObjects(void);
 void Timing_HwInit(void);
 void vTaskTiming(void *pvParameters);
 uint32_t Rpm_GetPulsesPerMinute(void);   /* impulsions/min ; 0 si moteur arrêté */
+
+/* ===== Module GNSS (NEO-M9N sur USART1, UBX NAV-PVT à 25 Hz) ===== */
+void Gnss_CreateObjects(void);
+void Gnss_HwInit(void);
+void vTaskGNSS(void *pvParameters);
+bool Gnss_GetFix(Gnss_Fix_t *fix);       /* dernière solution ; false si aucune reçue. Voir GNSS_FixIsValid() */
 
 /* ===== Module affichage ===== */
 void Display_HwInit(void);

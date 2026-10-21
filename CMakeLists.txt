@@ -95,6 +95,8 @@ set(APP_SOURCES
     ${CMAKE_SOURCE_DIR}/Core/Src/app_can.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_light.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_timing.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_gnss.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/gnss.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_display.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_led.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_irq.c

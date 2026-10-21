@@ -93,7 +93,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
     __HAL_RCC_GPIOF_CLK_ENABLE();
     __HAL_RCC_DMA1_CLK_ENABLE();
 
-    /* PF6 → TIM16_CH1 */
+    /* PB8 → TIM16_CH1 */
     GPIO_InitStruct.Pin       = GPIO_PIN_8;
     GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull      = GPIO_NOPULL;

@@ -38,6 +38,7 @@ static void vTaskInit(void *pvParameters)
   Light_HwInit();     /* VEML6030 : un échec n'est pas fatal, la tâche se supprimera */
   Can_HwInit();       /* filtre + démarrage FDCAN1 + interruption de réception */
   Timing_HwInit();    /* démarre la capture TIM5 + DMA (tour sur PA0, RPM sur PH11) */
+  Gnss_HwInit();      /* réception DMA de l'USART1 ; le module est configuré par vTaskGNSS */
 
   /* On autorise les interruptions EXTI seulement maintenant : leurs queues existent
      (créées avant le scheduler) et le matériel est prêt. */
@@ -73,12 +74,14 @@ void App_Start(void)
   Can_CreateObjects();
   Light_CreateObjects();
   Timing_CreateObjects();
+  Gnss_CreateObjects();
 
   /* 3) Tâches */
   APP_CREATE_TASK(vTaskInit,        "Init",        1024, PRIO_INIT);
   APP_CREATE_TASK(vTaskPowerButton, "PowerBtn",     512, PRIO_POWER);
   APP_CREATE_TASK(vTaskCAN,         "CAN",         1024, PRIO_CAN);
   APP_CREATE_TASK(vTaskTiming,      "Timing",       512, PRIO_TIMING);
+  APP_CREATE_TASK(vTaskGNSS,        "GNSS",         512, PRIO_GNSS);
   APP_CREATE_TASK(vTaskLightSensor, "LightSensor", 1024, PRIO_LIGHT);
   APP_CREATE_TASK(vTaskDisplay,     "Display",     2048, PRIO_DISPLAY);
   APP_CREATE_TASK(vTaskLED,         "LED",          512, PRIO_LED);
