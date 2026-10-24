@@ -98,6 +98,11 @@ void Error_Handler(void);
 
 #define CS_FLASH_GPIO_PIN  GPIO_PIN_0   /* PI0 — SPI2_CS, flash externe IC1 */
 #define CS_FLASH_GPIO_PORT GPIOI
+
+#define IMU_CS_PIN       GPIO_PIN_4   /* PA4 — SPI1_CS du BMI270, piloté en logiciel (voir bmi270.c) */
+#define IMU_CS_PORT      GPIOA
+#define IMU_INT_PIN      GPIO_PIN_0   /* PE0 — IMU_INT1 (EXTI0, front montant) */
+#define IMU_INT_PORT     GPIOE
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

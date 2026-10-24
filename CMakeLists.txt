@@ -97,6 +97,9 @@ set(APP_SOURCES
     ${CMAKE_SOURCE_DIR}/Core/Src/app_timing.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_gnss.c
     ${CMAKE_SOURCE_DIR}/Core/Src/gnss.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_imu.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/bmi270.c
+    ${CMAKE_SOURCE_DIR}/lib/bmi270_config/bmi270_config_file.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_display.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_led.c
     ${CMAKE_SOURCE_DIR}/Core/Src/app_irq.c
@@ -106,6 +109,11 @@ set(APP_SOURCES
     ${CMAKE_SOURCE_DIR}/Core/Src/sd_diskio.c
 )
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${APP_SOURCES})
+
+# Fichier de configuration Bosch du BMI270 : copié tel quel (licence BSD-3 dans son en-tête), il
+# n'inclut pas <stdint.h> -> on l'ajoute pour ce seul fichier plutôt que de modifier l'original.
+set_source_files_properties(${CMAKE_SOURCE_DIR}/lib/bmi270_config/bmi270_config_file.c
+    PROPERTIES COMPILE_OPTIONS "-include;stdint.h")
 
 # === FatFS (carte microSD) : R0.14b, config dans lib/fatfs/src/ffconf.h ===
 set(FATFS_DIR ${CMAKE_SOURCE_DIR}/lib/fatfs/src)

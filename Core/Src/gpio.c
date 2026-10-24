@@ -68,6 +68,9 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level : PI0 (SPI2_CS, flash externe IC1, idle haut) */
   HAL_GPIO_WritePin(GPIOI, GPIO_PIN_0, GPIO_PIN_SET);
 
+  /*Configure GPIO pin Output Level : PA4 (SPI1_CS, BMI270, idle haut) */
+  HAL_GPIO_WritePin(IMU_CS_PORT, IMU_CS_PIN, GPIO_PIN_SET);
+
   /*Configure GPIO pin Output Level : PH5 (EN ESP32) */
   HAL_GPIO_WritePin(EN_ESP32_PORT, EN_ESP32_PIN, GPIO_PIN_RESET);
 
@@ -184,6 +187,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
+
+  /* Configure GPIO pin : PA4 (SPI1_CS, BMI270, CS piloté en logiciel : voir bmi270.c) */
+  GPIO_InitStruct.Pin = IMU_CS_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(IMU_CS_PORT, &GPIO_InitStruct);
 
   /* PA0 (LAP_DET) et PH11 (RPM) ne sont PAS configurées ici : ce sont des entrées de capture
      TIM5 CH1/CH2 (AF2), configurées dans HAL_TIM_IC_MspInit() (tim.c). */

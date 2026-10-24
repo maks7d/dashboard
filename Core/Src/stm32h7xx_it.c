@@ -65,6 +65,8 @@ extern FDCAN_HandleTypeDef hfdcan1;
 /* USER CODE BEGIN EV */
 extern DMA_HandleTypeDef hdma_tim16_ch1;
 extern DMA_HandleTypeDef hdma_spi1_rx;
+extern DMA_HandleTypeDef hdma_spi1_tx;
+extern SPI_HandleTypeDef hspi1;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -249,5 +251,15 @@ void USART1_IRQHandler(void)         /* GNSS NEO-M9N : IDLE (fin de trame). Le D
 void DMA2_Stream0_IRQHandler(void)  /* SPI1 RX (IMU BMI270) */
 {
   HAL_DMA_IRQHandler(&hdma_spi1_rx);
+}
+
+void DMA2_Stream1_IRQHandler(void)  /* SPI1 TX (IMU BMI270) */
+{
+  HAL_DMA_IRQHandler(&hdma_spi1_tx);
+}
+
+void SPI1_IRQHandler(void)          /* SPI1 (IMU BMI270) : fin de transfert DMA (EOT) et erreurs */
+{
+  HAL_SPI_IRQHandler(&hspi1);
 }
 /* USER CODE END 1 */

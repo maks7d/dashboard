@@ -30,8 +30,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       Buttons_Irq(GPIO_Pin, &xHigherPriorityTaskWoken);
       break;
 
-    case GPIO_PIN_0:               /* PE0 : IMU_INT1 */
-      /* TODO : notifier la future tâche IMU (xTaskNotifyFromISR / queue) */
+    case GPIO_PIN_0:               /* PE0 : IMU_INT1 (FIFO du BMI270 au-dessus du seuil) */
+      Imu_Irq(&xHigherPriorityTaskWoken);
       break;
 
     case GPIO_PIN_4:               /* PI4 : INT_LIGHT_SENSOR */

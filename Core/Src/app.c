@@ -75,6 +75,7 @@ void App_Start(void)
   Light_CreateObjects();
   Timing_CreateObjects();
   Gnss_CreateObjects();
+  Imu_CreateObjects();
 
   /* 3) Tâches */
   APP_CREATE_TASK(vTaskInit,        "Init",        1024, PRIO_INIT);
@@ -82,6 +83,7 @@ void App_Start(void)
   APP_CREATE_TASK(vTaskCAN,         "CAN",         1024, PRIO_CAN);
   APP_CREATE_TASK(vTaskTiming,      "Timing",       512, PRIO_TIMING);
   APP_CREATE_TASK(vTaskGNSS,        "GNSS",         512, PRIO_GNSS);
+  APP_CREATE_TASK(vTaskIMU,         "IMU",          512, PRIO_IMU);
   APP_CREATE_TASK(vTaskLightSensor, "LightSensor", 1024, PRIO_LIGHT);
   APP_CREATE_TASK(vTaskDisplay,     "Display",     2048, PRIO_DISPLAY);
   APP_CREATE_TASK(vTaskLED,         "LED",          512, PRIO_LED);

@@ -22,12 +22,16 @@
 
 /* USER CODE BEGIN 0 */
 DMA_HandleTypeDef hdma_spi1_rx;
+DMA_HandleTypeDef hdma_spi1_tx;
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 
-/* SPI1 init function */
+/* SPI1 init function — BMI270 (IMU), mode 0, CS piloté en logiciel via PA4 (voir gpio.c et bmi270.c).
+   Horloge noyau = CKPER = HSI 64 MHz (main.c) : prescaler 8 -> 8 MHz, sous le maximum de 10 MHz du
+   BMI270 (datasheet p. 123). MasterKeepIOState : SCK et MOSI restent pilotés par le SPI entre deux
+   transferts, pour qu'aucun parasite ne parvienne au capteur pendant que CS est bas. */
 void MX_SPI1_Init(void)
 {
 
@@ -44,13 +48,13 @@ void MX_SPI1_Init(void)
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi1.Init.CRCPolynomial = 0x0;
-  hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  hspi1.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
   hspi1.Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
   hspi1.Init.FifoThreshold = SPI_FIFO_THRESHOLD_01DATA;
   hspi1.Init.TxCRCInitializationPattern = SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
@@ -58,7 +62,7 @@ void MX_SPI1_Init(void)
   hspi1.Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
   hspi1.Init.MasterInterDataIdleness = SPI_MASTER_INTERDATA_IDLENESS_00CYCLE;
   hspi1.Init.MasterReceiverAutoSusp = SPI_MASTER_RX_AUTOSUSP_DISABLE;
-  hspi1.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_DISABLE;
+  hspi1.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_ENABLE;
   hspi1.Init.IOSwap = SPI_IO_SWAP_DISABLE;
   if (HAL_SPI_Init(&hspi1) != HAL_OK)
   {
@@ -137,8 +141,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     __HAL_RCC_SPI1_CLK_ENABLE();
 
     __HAL_RCC_GPIOG_CLK_ENABLE();
-    /**SPI1 GPIO Configuration
-    PA4     ------> SPI1_NSS
+    /**SPI1 GPIO Configuration (CS = PA4, piloté en GPIO logiciel, voir gpio.c)
     PG11    ------> SPI1_SCK
     PG9     ------> SPI1_MISO
     PA7     ------> SPI1_MOSI
@@ -147,8 +150,8 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
 
-    //NSS + MOSI sur GPIOA
-    GPIO_InitStruct.Pin       = GPIO_PIN_4|GPIO_PIN_7;
+    //MOSI sur GPIOA
+    GPIO_InitStruct.Pin       = GPIO_PIN_7;
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -175,6 +178,29 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     __HAL_LINKDMA(spiHandle, hdmarx, hdma_spi1_rx);
     HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+
+    /* SPI1 TX DMA — DMA2_Stream1. Sert UNIQUEMENT à la lecture du FIFO du BMI270 : il faut envoyer
+       autant d'octets que l'on en reçoit. MemInc désactivé : le DMA renvoie en boucle le même
+       octet (l'adresse du registre, voir bmi270.c), le capteur ignore MOSI après l'adresse. */
+    hdma_spi1_tx.Instance                 = DMA2_Stream1;
+    hdma_spi1_tx.Init.Request             = DMA_REQUEST_SPI1_TX;
+    hdma_spi1_tx.Init.Direction           = DMA_MEMORY_TO_PERIPH;
+    hdma_spi1_tx.Init.PeriphInc           = DMA_PINC_DISABLE;
+    hdma_spi1_tx.Init.MemInc              = DMA_MINC_DISABLE;
+    hdma_spi1_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_spi1_tx.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
+    hdma_spi1_tx.Init.Mode                = DMA_NORMAL;
+    hdma_spi1_tx.Init.Priority            = DMA_PRIORITY_HIGH;
+    hdma_spi1_tx.Init.FIFOMode            = DMA_FIFOMODE_DISABLE;
+    if (HAL_DMA_Init(&hdma_spi1_tx) != HAL_OK)
+      Error_Handler();
+    __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi1_tx);
+    HAL_NVIC_SetPriority(DMA2_Stream1_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(DMA2_Stream1_IRQn);
+
+    /* Fin de transfert DMA : la HAL passe par l'interruption EOT de SPI1 (HAL_SPI_IRQHandler) */
+    HAL_NVIC_SetPriority(SPI1_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(SPI1_IRQn);
   /* USER CODE END SPI1_MspInit 1 */
   }
   else if(spiHandle->Instance==SPI2)
@@ -226,12 +252,11 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
     __HAL_RCC_SPI1_CLK_DISABLE();
 
     /**SPI1 GPIO Configuration
-    PA4     ------> SPI1_NSS
     PG11    ------> SPI1_SCK
     PG9     ------> SPI1_MISO
     PA7     ------> SPI1_MOSI
     */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4|GPIO_PIN_7);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_7);
     HAL_GPIO_DeInit(GPIOG, GPIO_PIN_11|GPIO_PIN_9);
 
   /* USER CODE BEGIN SPI1_MspDeInit 1 */
